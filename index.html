@@ -3,399 +3,457 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UK Mission Control - Economic Reality</title>
+<title>UK Mission Control — Leak Intelligence Engine</title>
 <style>
 :root{
-  --bg:#020403;--panel:#07100b;--panel2:#0a1510;--grid:#0d2b1b;--green:#00ff6a;
-  --green2:#76ff9d;--amber:#ffbf36;--red:#ff3d4f;--blue:#4dd7ff;--muted:#7b8f83;
+  --bg:#010302;--panel:#06110b;--green:#00ff6a;--green2:#76ff9d;
+  --red:#ff4455;--yellow:#f6c344;--blue:#44c7ff;--orange:#ff8b44;--muted:#8aa392;
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#0b2116 0,#020403 38%,#000 100%);color:var(--green);font-family:Consolas,Monaco,monospace;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.025) 50%,rgba(0,0,0,.03) 50%);background-size:100% 4px;mix-blend-mode:screen;opacity:.28;z-index:30}
-header{padding:12px 16px;border-bottom:1px solid #124d2c;text-align:center;background:rgba(0,0,0,.72);position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}
-h1{margin:0;color:#fff;letter-spacing:2px;font-size:clamp(18px,3vw,34px)}
-.sub{color:var(--muted);font-size:12px;margin-top:4px}
+body{
+  margin:0;background:radial-gradient(circle at top,#0b2417,#010302 45%,#000);
+  color:var(--green);font-family:Consolas,Monaco,monospace;overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.23;z-index:50;
+  background:linear-gradient(rgba(255,255,255,.035) 50%,rgba(0,0,0,.025) 50%);
+  background-size:100% 4px;
+}
+header{padding:14px;text-align:center;border-bottom:1px solid #145c34;background:#020604}
+h1{margin:0;color:#fff;letter-spacing:2px;font-size:clamp(20px,3vw,36px)}
+.sub{color:var(--muted);font-size:12px;margin-top:5px}
 .wrap{max-width:1700px;margin:0 auto;padding:10px}
-.debt-wall{border:1px solid #1aff73;background:linear-gradient(180deg,#08170f,#010302);box-shadow:0 0 28px rgba(0,255,106,.16) inset,0 0 28px rgba(0,255,106,.08);padding:16px;text-align:center;position:relative;overflow:hidden}
-.debt-wall:after{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent 0 84%,rgba(0,255,106,.10),transparent 90%);animation:sweepWall 9s linear infinite;z-index:0}
-.debt-wall.pulse{animation:wallPulse .38s ease}
-@keyframes sweepWall{to{transform:rotate(360deg)}}
-@keyframes wallPulse{0%{box-shadow:0 0 28px rgba(0,255,106,.16) inset,0 0 20px rgba(0,255,106,.1)}50%{box-shadow:0 0 42px rgba(0,255,106,.34) inset,0 0 36px rgba(0,255,106,.25)}100%{box-shadow:0 0 28px rgba(0,255,106,.16) inset,0 0 20px rgba(0,255,106,.1)}}
-.label{color:#fff;font-size:13px;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1}
-.big{font-size:clamp(36px,7.5vw,112px);font-weight:900;letter-spacing:-4px;text-shadow:0 0 18px rgba(0,255,106,.45);position:relative;z-index:1;line-height:1.03;font-variant-numeric:tabular-nums}
-.digitRoll{display:inline-block;min-width:.58em;transition:transform .18s ease,filter .18s ease}
-.digitRoll.bump{transform:translateY(-.08em);filter:brightness(1.45)}
-.rate{color:var(--red);font-size:clamp(14px,2vw,24px);position:relative;z-index:1}
-.grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:10px}
-.panel{border:1px solid #124d2c;background:rgba(5,14,9,.94);padding:12px;min-height:340px;box-shadow:inset 0 0 30px rgba(0,0,0,.5);overflow:hidden;position:relative}
-.panel.feature{box-shadow:inset 0 0 34px rgba(0,255,106,.08),0 0 22px rgba(0,255,106,.06);border-color:#1c7f45}
-.panel h2{margin:0 0 10px;color:#fff;font-size:15px;letter-spacing:1px;text-transform:uppercase}
-canvas,svg{width:100%;display:block}
-.row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.tile{border:1px solid #123820;background:#030805;padding:9px;min-height:78px}
+.debt-wall{
+  position:relative;overflow:hidden;text-align:center;padding:18px;border:1px solid var(--green);
+  background:linear-gradient(180deg,#07160e,#010302);box-shadow:inset 0 0 30px #003d1d,0 0 25px #003d1d;
+}
+.debt-wall:after{
+  content:"";position:absolute;inset:-80%;background:conic-gradient(transparent 0 84%,rgba(0,255,106,.11),transparent 90%);
+  animation:spin 9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.label{position:relative;z-index:1;color:#fff;text-transform:uppercase;letter-spacing:2px;font-size:13px}
+.big{
+  position:relative;z-index:1;font-size:clamp(38px,7.5vw,112px);font-weight:900;
+  letter-spacing:-4px;line-height:1.05;text-shadow:0 0 18px rgba(0,255,106,.45);
+  font-variant-numeric:tabular-nums;
+}
+.rate{position:relative;z-index:1;color:var(--red);font-size:clamp(14px,2vw,24px)}
+.topgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.tile{border:1px solid #17442a;background:#030805;padding:10px;min-height:76px}
 .tile .t{color:var(--muted);font-size:11px;text-transform:uppercase}
-.tile .v{font-size:clamp(20px,2.2vw,36px);font-weight:800;color:var(--green2);font-variant-numeric:tabular-nums}
-.warn{color:var(--amber)!important}.bad{color:var(--red)!important}
-.gaugebox{display:grid;place-items:center;height:250px;margin-top:4px}
-.alertLine{height:22px;text-align:center;color:var(--red);font-size:12px;letter-spacing:2px;text-transform:uppercase;animation:alertPulse .85s ease-in-out infinite}
-@keyframes alertPulse{50%{opacity:.18;text-shadow:0 0 16px var(--red)}}
-.gaugeCaption{text-align:center;color:var(--muted);font-size:12px;line-height:1.35;max-width:460px;margin:2px auto 0}
-#fuelNeedle{transition:filter .2s;filter:drop-shadow(0 0 7px #fff)}
-.sliderbox{padding-top:6px}
-input[type=range]{width:100%;accent-color:var(--green)}
-.timeline{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
-.yearRail{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:8px 0 0}
-.yearTick{border:1px solid #163d26;text-align:center;padding:4px 2px;color:#6f8d7a;font-size:11px;background:#020604}
-.yearTick.active{color:#fff;border-color:var(--green);box-shadow:0 0 12px rgba(0,255,106,.22)}
-.ppwrap{height:255px;display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column}
+.tile .v{font-size:clamp(20px,2.2vw,34px);font-weight:900;font-variant-numeric:tabular-nums}
+.main{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px
+}
+.panel{
+  min-height:350px;border:1px solid #145c34;background:rgba(5,16,10,.94);
+  padding:12px;overflow:hidden;position:relative;box-shadow:inset 0 0 28px rgba(0,0,0,.65)
+}
+.panel.feature{border-color:#20a75a;box-shadow:inset 0 0 34px rgba(0,255,106,.09),0 0 20px rgba(0,255,106,.08)}
+h2{margin:0 0 10px;color:#fff;font-size:15px;letter-spacing:1px;text-transform:uppercase}
+canvas,svg{display:block;width:100%}
 .note{color:var(--muted);font-size:12px;line-height:1.35}
-.decay{font-size:clamp(44px,8vw,92px);font-weight:900;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.35);transform-origin:center;font-variant-numeric:tabular-nums}
-.lostLine{font-size:18px;color:var(--red);font-weight:800;min-height:24px}
-.powerBlocks{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;width:86%;height:28px}
-.powerBlocks span{border:1px solid #324537;background:#101510;box-shadow:inset 0 0 10px rgba(0,0,0,.55)}
-.powerBlocks span.on{background:linear-gradient(180deg,#10ff75,#c9e93b,#ffbf36);box-shadow:0 0 10px rgba(0,255,106,.25)}
-.decaybar{height:22px;width:86%;border:1px solid #333;background:#111;overflow:hidden;position:relative}
-.decaybar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--amber));transition:width .04s linear}
-.decaybar:after{content:"£52 today";position:absolute;right:8px;top:2px;color:#000;font-weight:bold;font-size:12px}
-.leakpipe{height:136px;border:1px solid #3d1318;position:relative;overflow:hidden;background:radial-gradient(circle at 12% 50%,#471119 0,#170406 40%,#080202 100%);border-radius:12px}
-.leakpipe:before{content:"";position:absolute;left:4%;right:4%;top:48%;height:34px;border-radius:20px;background:linear-gradient(90deg,#2b070b,#64111a,#2b070b);box-shadow:0 0 22px rgba(255,61,79,.35) inset,0 0 18px rgba(255,61,79,.18);transform:translateY(-50%)}
-.leakpipe:after{content:"HOUSING LEAK";position:absolute;left:14px;top:10px;color:#ff8b95;font-size:12px;letter-spacing:2px}
-.stream{position:absolute;left:-25%;top:48%;height:20px;width:24%;border-radius:20px;background:linear-gradient(90deg,transparent,rgba(255,61,79,.25),#ff3d4f,transparent);filter:blur(.5px);animation:stream 1.1s linear infinite}
-@keyframes stream{to{left:104%}}
-.drop{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:flow 1.2s linear infinite}
-@keyframes flow{from{left:-30px}to{left:105%}}
-.changeBox{border:1px solid #123820;background:#030805;padding:10px;margin-top:10px;color:#dfffe8;font-size:12px;line-height:1.45;min-height:58px}
-.status{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:11px}
-.pill{border:1px solid #1d6138;padding:4px 7px;background:#020503}
-@media(max-width:1000px){.grid{grid-template-columns:1fr}.row{grid-template-columns:repeat(2,1fr)}.panel{min-height:auto}.big{letter-spacing:-2px}.gaugebox{height:225px}}
+.gaugebox{height:252px;display:grid;place-items:center}
+.alert{height:22px;text-align:center;color:var(--red);font-size:12px;letter-spacing:2px;text-transform:uppercase;animation:blink .9s infinite}
+@keyframes blink{50%{opacity:.2;text-shadow:0 0 16px var(--red)}}
+#fuelNeedle{filter:drop-shadow(0 0 8px #fff)}
+.pipe{
+  height:142px;border-radius:14px;border:1px solid #333;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 15% 50%,rgba(255,255,255,.08),rgba(0,0,0,.1) 20%,#050505 100%);
+}
+.pipe:before{
+  content:"";position:absolute;left:4%;right:4%;top:50%;height:34px;transform:translateY(-50%);
+  border-radius:20px;background:linear-gradient(90deg,rgba(255,255,255,.05),var(--active,#ff4455),rgba(255,255,255,.05));
+  box-shadow:0 0 25px var(--active,#ff4455);
+}
+.stream{
+  position:absolute;left:-30%;top:50%;height:20px;width:28%;border-radius:20px;
+  background:linear-gradient(90deg,transparent,var(--active,#ff4455),transparent);
+  filter:blur(.5px);animation:flow var(--speed,1s) linear infinite;
+}
+.drop{
+  position:absolute;width:var(--dot,9px);height:var(--dot,9px);border-radius:50%;background:var(--active,#ff4455);
+  box-shadow:0 0 12px var(--active,#ff4455);animation:dot var(--speed,1s) linear infinite;
+}
+@keyframes flow{to{left:105%}}
+@keyframes dot{from{left:-30px}to{left:105%}}
+.leakInfo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.power{height:260px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.decay{font-size:clamp(48px,8vw,90px);font-weight:900;color:#fff;font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(255,255,255,.35)}
+.blocks{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;width:88%;height:28px}
+.blocks span{border:1px solid #314538;background:#0d120f}
+.blocks span.on{background:linear-gradient(180deg,#00ff6a,#f6c344);box-shadow:0 0 10px rgba(0,255,106,.3)}
+.bar{height:22px;width:88%;border:1px solid #333;background:#111;position:relative;overflow:hidden}
+.bar span{height:100%;display:block;background:linear-gradient(90deg,var(--green),var(--yellow));width:100%}
+.slider input{width:100%;accent-color:var(--green)}
+.years{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+.years button{background:#020604;border:1px solid #17442a;color:var(--muted);padding:5px;font-family:inherit}
+.years button.active{color:#fff;border-color:var(--green);box-shadow:0 0 12px rgba(0,255,106,.25)}
+.summary{border:1px solid #17442a;background:#030805;color:#dfffe8;padding:10px;margin-top:10px;font-size:12px;line-height:1.45}
+.bad{color:var(--red)}.warn{color:var(--yellow)}.blue{color:var(--blue)}
+@media(max-width:1050px){.main{grid-template-columns:1fr}.topgrid{grid-template-columns:repeat(2,1fr)}.panel{min-height:auto}.leakInfo{grid-template-columns:1fr}.big{letter-spacing:-2px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>UK MISSION CONTROL FOR HOUSEHOLD FINANCIAL PRESSURE</h1>
-  <div class="sub">Static Numbers → Animated Systems · single-file index.html runtime</div>
+  <h1>UK MISSION CONTROL — LEAK INTELLIGENCE ENGINE™</h1>
+  <div class="sub">Radar discovers the threat → pipe visualises it → pie explains it</div>
 </header>
 
 <div class="wrap">
-  <section id="debtWall" class="debt-wall">
+  <section class="debt-wall">
     <div class="label">Animated National Debt Wall</div>
-    <div id="debt" class="big">£0</div>
-    <div id="debtRate" class="rate">+£0/sec</div>
+    <div id="debt" class="big">£3,104,672,883,219</div>
+    <div id="rate" class="rate">+£5,842/sec</div>
   </section>
 
-  <div class="row">
-    <div class="tile"><div class="t">Debt Interest Today</div><div id="interestToday" class="v bad"></div></div>
-    <div class="tile"><div class="t">Debt Per Citizen</div><div id="perCitizen" class="v"></div></div>
-    <div class="tile"><div class="t">Debt Per Taxpayer</div><div id="perTaxpayer" class="v warn"></div></div>
-    <div class="tile"><div class="t">Financial Fuel Tank</div><div id="fuelText" class="v bad"></div></div>
+  <div class="topgrid">
+    <div class="tile"><div class="t">Debt Interest Today</div><div id="interest" class="v bad">£328,447,192</div></div>
+    <div class="tile"><div class="t">Debt Per Citizen</div><div id="citizen" class="v">£45,657</div></div>
+    <div class="tile"><div class="t">Debt Per Taxpayer</div><div id="taxpayer" class="v warn">£94,081</div></div>
+    <div class="tile"><div class="t">Active Leak Detected</div><div id="activeTop" class="v bad">Housing</div></div>
   </div>
 
-  <main class="grid">
+  <main class="main">
     <section class="panel feature">
-      <h2>Financial SatNav Fuel Gauge</h2>
-      <div id="fuelAlert" class="alertLine">Low financial fuel</div>
-      <div class="gaugebox">
-        <svg viewBox="0 0 320 210" aria-label="Financial fuel gauge">
-          <path d="M55 165 A105 105 0 0 1 265 165" fill="none" stroke="#1d3827" stroke-width="26" stroke-linecap="round"/>
-          <path d="M55 165 A105 105 0 0 1 125 66" fill="none" stroke="#ff3d4f" stroke-width="26" stroke-linecap="round"/>
-          <path d="M125 66 A105 105 0 0 1 205 66" fill="none" stroke="#ffbf36" stroke-width="26" stroke-linecap="round"/>
-          <path d="M205 66 A105 105 0 0 1 265 165" fill="none" stroke="#00ff6a" stroke-width="26" stroke-linecap="round"/>
-          <g stroke="#dfffe8" stroke-width="2">
-            <line x1="55" y1="165" x2="72" y2="155"/>
-            <line x1="110" y1="82" x2="121" y2="98"/>
-            <line x1="160" y1="60" x2="160" y2="82"/>
-            <line x1="210" y1="82" x2="199" y2="98"/>
-            <line x1="265" y1="165" x2="248" y2="155"/>
-          </g>
-          <text x="54" y="198" fill="#ff3d4f" font-size="19">E</text>
-          <text x="250" y="198" fill="#00ff6a" font-size="19">F</text>
-          <line id="fuelNeedle" x1="160" y1="165" x2="160" y2="82" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="160" cy="165" r="11" fill="#fff"/>
-          <text id="fuelGaugeText" x="160" y="135" fill="#fff" text-anchor="middle" font-size="34" font-weight="900">41%</text>
-        </svg>
-      </div>
-      <div class="gaugeCaption">Live stress gauge with smooth needle drift, micro-jitter and low-fuel warning pulse.</div>
+      <h2>Leak Radar Scanner</h2>
+      <canvas id="radar" height="315"></canvas>
+      <div class="note">Slow sweep. When the beam hits a leak, the entire Leak Intelligence Engine reacts.</div>
     </section>
 
     <section class="panel feature">
-      <h2>Leak Radar Scanner</h2>
-      <canvas id="radar" height="310"></canvas>
-      <div class="note">Active scanner: beam persistence, threat pings and stronger returns for bigger household leaks.</div>
+      <h2>Dynamic Leak Pipe</h2>
+      <div id="pipe" class="pipe"></div>
+      <div class="leakInfo">
+        <div class="tile"><div class="t">Detected Leak</div><div id="mainLeak" class="v bad">Housing</div></div>
+        <div class="tile"><div class="t">Annual Amount</div><div id="leakAmount" class="v bad">£8,200</div></div>
+        <div class="tile"><div class="t">Pressure Share</div><div id="leakPercent" class="v bad">44%</div></div>
+      </div>
+      <div class="note" style="margin-top:8px">Pipe colour, stream speed and particle size are driven by the currently detected radar threat.</div>
+    </section>
+
+    <section class="panel feature">
+      <h2>Leak Pie — Active Segment</h2>
+      <canvas id="pie" height="315"></canvas>
+      <div class="note">The active radar target brightens and expands while non-active leak sources dim.</div>
     </section>
 
     <section class="panel">
-      <h2>Leak Pie</h2>
-      <canvas id="pie" height="310"></canvas>
-      <div class="note">Pie rebalances with the Time Machine as household pressure shifts through history.</div>
+      <h2>Financial SatNav Fuel Gauge</h2>
+      <div id="fuelAlert" class="alert">Low financial fuel</div>
+      <div class="gaugebox">
+        <svg viewBox="0 0 320 210">
+          <path d="M55 165 A105 105 0 0 1 265 165" fill="none" stroke="#1d3827" stroke-width="26" stroke-linecap="round"/>
+          <path d="M55 165 A105 105 0 0 1 125 66" fill="none" stroke="#ff4455" stroke-width="26" stroke-linecap="round"/>
+          <path d="M125 66 A105 105 0 0 1 205 66" fill="none" stroke="#f6c344" stroke-width="26" stroke-linecap="round"/>
+          <path d="M205 66 A105 105 0 0 1 265 165" fill="none" stroke="#00ff6a" stroke-width="26" stroke-linecap="round"/>
+          <text x="54" y="198" fill="#ff4455" font-size="19">E</text>
+          <text x="250" y="198" fill="#00ff6a" font-size="19">F</text>
+          <line id="fuelNeedle" x1="160" y1="165" x2="160" y2="82" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="160" cy="165" r="11" fill="#fff"/>
+          <text id="fuelText" x="160" y="135" fill="#fff" text-anchor="middle" font-size="34" font-weight="900">41%</text>
+        </svg>
+      </div>
     </section>
 
     <section class="panel">
       <h2>Purchasing Power Decay</h2>
-      <div class="ppwrap">
+      <div class="power">
         <div id="decay" class="decay">£100</div>
-        <div id="lostLine" class="lostLine">Lost £0</div>
-        <div id="powerBlocks" class="powerBlocks"></div>
-        <div class="decaybar"><span id="decayFill"></span></div>
-        <div class="note">The number, blocks and bar decay together from £100 purchasing power toward £52 today.</div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2>Housing Leak Animation</h2>
-      <div class="leakpipe" id="pipe"></div>
-      <div class="row" style="grid-template-columns:repeat(2,1fr);margin-top:8px">
-        <div class="tile"><div class="t">Housing Leak</div><div id="housingLeak" class="v bad">£8,200</div></div>
-        <div class="tile"><div class="t">Main Leak</div><div id="mainLeak" class="v bad">Housing</div></div>
+        <div id="lost" class="bad" style="font-weight:900;font-size:18px">Lost £0</div>
+        <div id="blocks" class="blocks"></div>
+        <div class="bar"><span id="decayBar"></span></div>
+        <div class="note">The value, blocks and bar fall together from £100 to £52.</div>
       </div>
     </section>
 
     <section class="panel">
       <h2>Time Machine</h2>
-      <div class="sliderbox">
-        <input id="year" type="range" min="2000" max="2026" value="2026" step="1">
-        <div class="timeline"><span>2000</span><span id="yearLabel">2026</span><span>2026</span></div>
-        <div id="yearRail" class="yearRail"></div>
+      <div class="slider">
+        <input id="year" type="range" min="2000" max="2026" value="2026">
+        <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:11px">
+          <span>2000</span><span id="yearLabel">2026</span><span>2026</span>
+        </div>
+        <div id="years" class="years"></div>
       </div>
-      <div class="row" style="grid-template-columns:repeat(2,1fr);margin-top:12px">
-        <div class="tile"><div class="t">Debt</div><div id="tmDebt" class="v"></div></div>
-        <div class="tile"><div class="t">House Price</div><div id="tmHouse" class="v warn"></div></div>
-        <div class="tile"><div class="t">Gold</div><div id="tmGold" class="v"></div></div>
-        <div class="tile"><div class="t">Fuel Tank</div><div id="tmFuel" class="v bad"></div></div>
+      <div class="leakInfo">
+        <div class="tile"><div class="t">Debt</div><div id="tmDebt" class="v">£3.10T</div></div>
+        <div class="tile"><div class="t">House Price</div><div id="tmHouse" class="v warn">£290,000</div></div>
+        <div class="tile"><div class="t">Fuel Tank</div><div id="tmFuel" class="v bad">41%</div></div>
       </div>
-      <div id="whatChanged" class="changeBox"></div>
+      <div id="summary" class="summary"></div>
     </section>
   </main>
-
-  <div class="status">
-    <span class="pill">Runtime: requestAnimationFrame</span>
-    <span class="pill">Mode: animated systems</span>
-    <span class="pill">Time Machine: interconnected</span>
-    <span class="pill">Deploy: one static HTML file</span>
-  </div>
 </div>
 
 <script>
-const app={
-  debt:3104672883219,lastDebtText:"",debtPerSecond:5842,interestToday:328447192,interestPerSecond:13,
-  population:68000000,taxpayers:33000000,fuelTarget:41,fuelDisplay:41,yearTarget:2026,yearDisplay:2026,
-  last:performance.now(),radarAngle:0,pingGlow:0,ppValue:100,
-  leakDisplay:[
-    {name:"Housing",value:44,color:"#ff3d4f",r:.77,a:-.38},
-    {name:"Food",value:21,color:"#ffbf36",r:.57,a:2.55},
-    {name:"Energy",value:15,color:"#4dd7ff",r:.45,a:1.25},
-    {name:"Tax",value:13,color:"#ff7a3d",r:.64,a:3.72},
-    {name:"Other",value:7,color:"#76ff9d",r:.32,a:5.12}
+(function(){
+"use strict";
+
+const app = {
+  debt:3104672883219,
+  debtPerSecond:5842,
+  interest:328447192,
+  interestPerSecond:13,
+  population:68000000,
+  taxpayers:33000000,
+  radarAngle:0,
+  previousHit:null,
+  activeLeak:null,
+  activeSince:0,
+  yearTarget:2026,
+  yearDisplay:2026,
+  fuelDisplay:41,
+  last:performance.now(),
+  leaks:[
+    {id:"housing",name:"Housing",colour:"#ff4455",amount:8200,percent:44,severity:5,angle:-0.38},
+    {id:"food",name:"Food",colour:"#f6c344",amount:3900,percent:21,severity:3,angle:2.55},
+    {id:"energy",name:"Energy",colour:"#44c7ff",amount:2700,percent:15,severity:2,angle:1.25},
+    {id:"tax",name:"Tax",colour:"#ff8b44",amount:2400,percent:13,severity:2,angle:3.72},
+    {id:"other",name:"Other",colour:"#77ff99",amount:1540,percent:7,severity:1,angle:5.12}
   ],
-  leakTarget:null,
+  pulses:[],
   history:{
-    2000:{debt:.36,house:85000,gold:180,fuel:89,leaks:{Housing:29,Food:18,Energy:10,Tax:26,Other:17}},
-    2005:{debt:.48,house:158000,gold:260,fuel:78,leaks:{Housing:35,Food:17,Energy:11,Tax:24,Other:13}},
-    2010:{debt:1.0,house:168000,gold:780,fuel:68,leaks:{Housing:37,Food:18,Energy:12,Tax:21,Other:12}},
-    2015:{debt:1.6,house:195000,gold:760,fuel:61,leaks:{Housing:39,Food:18,Energy:13,Tax:19,Other:11}},
-    2020:{debt:2.1,house:235000,gold:1400,fuel:52,leaks:{Housing:42,Food:19,Energy:14,Tax:16,Other:9}},
-    2026:{debt:3.1,house:290000,gold:2400,fuel:41,leaks:{Housing:44,Food:21,Energy:15,Tax:13,Other:7}}
+    2000:{debt:.36,house:85000,fuel:89,scale:.7},
+    2005:{debt:.48,house:158000,fuel:78,scale:.78},
+    2010:{debt:1.0,house:168000,fuel:68,scale:.85},
+    2015:{debt:1.6,house:195000,fuel:61,scale:.92},
+    2020:{debt:2.1,house:235000,fuel:52,scale:.97},
+    2026:{debt:3.1,house:290000,fuel:41,scale:1}
   }
 };
 
-const $=id=>document.getElementById(id);
-const money=n=>"£"+Math.round(n).toLocaleString();
+const $ = id => document.getElementById(id);
+const money = n => "£" + Math.round(n).toLocaleString();
 
-function odometer(el,text){
-  if(text===app.lastDebtText)return;
-  let out="";
-  for(let i=0;i<text.length;i++){
-    const c=text[i], old=app.lastDebtText[i];
-    if(/\d/.test(c)) out+=`<span class="digitRoll ${c!==old?'bump':''}">${c}</span>`;
-    else out+=c;
-  }
-  el.innerHTML=out; app.lastDebtText=text;
-  $("debtWall").classList.remove("pulse"); void $("debtWall").offsetWidth; $("debtWall").classList.add("pulse");
+function norm(a){
+  return Math.atan2(Math.sin(a),Math.cos(a));
+}
+
+function setActiveLeak(leak, now){
+  if(app.activeLeak && app.activeLeak.id === leak.id) return;
+  app.activeLeak = leak;
+  app.activeSince = now;
+  app.pulses.push({leak, start:now});
+  renderActiveLeak();
+}
+
+function renderActiveLeak(){
+  const l = app.activeLeak || app.leaks[0];
+  document.documentElement.style.setProperty("--active", l.colour);
+  document.documentElement.style.setProperty("--speed", Math.max(.38, 1.35 - l.severity*.18) + "s");
+  document.documentElement.style.setProperty("--dot", (6 + l.severity*2.1) + "px");
+  $("activeTop").textContent = l.name;
+  $("activeTop").style.color = l.colour;
+  $("mainLeak").textContent = l.name;
+  $("mainLeak").style.color = l.colour;
+  $("leakAmount").textContent = money(l.amount);
+  $("leakAmount").style.color = l.colour;
+  $("leakPercent").textContent = Math.round(l.percent) + "%";
+  $("leakPercent").style.color = l.colour;
 }
 
 function interp(year,key){
-  const years=Object.keys(app.history).map(Number).sort((a,b)=>a-b);
-  let a=years[0],b=years.at(-1);
-  for(let i=0;i<years.length-1;i++){if(year>=years[i]&&year<=years[i+1]){a=years[i];b=years[i+1];break}}
-  const t=(year-a)/(b-a||1);
-  if(key==="leaks"){
-    const out={};
-    Object.keys(app.history[a].leaks).forEach(k=>out[k]=app.history[a].leaks[k]+(app.history[b].leaks[k]-app.history[a].leaks[k])*t);
-    return out;
+  const keys = Object.keys(app.history).map(Number).sort((a,b)=>a-b);
+  let a=keys[0], b=keys[keys.length-1];
+  for(let i=0;i<keys.length-1;i++){
+    if(year>=keys[i] && year<=keys[i+1]){a=keys[i];b=keys[i+1];break;}
   }
-  return app.history[a][key]+(app.history[b][key]-app.history[a][key])*t;
+  const t=(year-a)/(b-a || 1);
+  return app.history[a][key] + (app.history[b][key]-app.history[a][key])*t;
 }
 
-function updateCore(now){
-  odometer($("debt"),money(app.debt));
-  $("debtRate").textContent="+"+money(app.debtPerSecond)+"/sec";
-  $("interestToday").textContent=money(app.interestToday);
-  $("perCitizen").textContent=money(app.debt/app.population);
-  $("perTaxpayer").textContent=money(app.debt/app.taxpayers);
+function updateCore(dt,now){
+  app.debt += app.debtPerSecond * dt/1000;
+  app.interest += app.interestPerSecond * dt/1000;
+  $("debt").textContent = money(app.debt);
+  $("interest").textContent = money(app.interest);
+  $("citizen").textContent = money(app.debt/app.population);
+  $("taxpayer").textContent = money(app.debt/app.taxpayers);
+  $("rate").textContent = "+" + money(app.debtPerSecond) + "/sec";
 
-  app.fuelTarget=interp(app.yearDisplay,"fuel");
-  app.fuelDisplay += (app.fuelTarget-app.fuelDisplay)*.045;
-  const jitter=(Math.sin(now/180)*.7)+(Math.sin(now/73)*.28);
-  const fuel=Math.round(app.fuelDisplay);
-  $("fuelText").textContent=fuel+"%";
-  $("fuelGaugeText").textContent=fuel+"%";
-  const deg=-90+(app.fuelDisplay/100)*180+jitter;
-  $("fuelNeedle").setAttribute("transform",`rotate(${deg} 160 165)`);
-  $("fuelNeedle").style.filter=fuel<50?`drop-shadow(0 0 ${9+Math.sin(now/95)*5}px #ff3d4f)`:"drop-shadow(0 0 7px #fff)";
-  $("fuelAlert").style.visibility=fuel<50?"visible":"hidden";
+  app.yearDisplay += (app.yearTarget-app.yearDisplay)*.08;
+  const y = app.yearDisplay;
+  $("yearLabel").textContent = Math.round(y);
+  $("tmDebt").textContent = "£" + interp(y,"debt").toFixed(2) + "T";
+  $("tmHouse").textContent = money(interp(y,"house"));
+  const fuel = interp(y,"fuel");
+  app.fuelDisplay += (fuel-app.fuelDisplay)*.045;
+  $("tmFuel").textContent = Math.round(app.fuelDisplay) + "%";
+  $("fuelText").textContent = Math.round(app.fuelDisplay) + "%";
+  const jitter = Math.sin(now/160)*.8 + Math.sin(now/71)*.3;
+  $("fuelNeedle").setAttribute("transform",`rotate(${-90+(app.fuelDisplay/100)*180+jitter} 160 165)`);
+  $("fuelAlert").style.visibility = app.fuelDisplay < 50 ? "visible" : "hidden";
+
+  const debtRise = ((interp(y,"debt")/.36-1)*100).toFixed(0);
+  const houseRise = ((interp(y,"house")/85000-1)*100).toFixed(0);
+  $("summary").innerHTML = `Since 2000: debt is up <b class="bad">+${debtRise}%</b>, house prices are up <b class="warn">+${houseRise}%</b>, and the fuel tank is down <b class="bad">${(89-fuel).toFixed(0)} points</b>.`;
+
+  document.querySelectorAll(".years button").forEach(b=>b.classList.toggle("active", Number(b.dataset.y)===Math.round(app.yearTarget)));
 }
 
-function updateTimeMachine(){
-  app.yearDisplay += (app.yearTarget-app.yearDisplay)*.085;
-  const y=app.yearDisplay;
-  $("yearLabel").textContent=Math.round(y);
-  const debt=interp(y,"debt"),house=interp(y,"house"),gold=interp(y,"gold"),fuel=interp(y,"fuel");
-  $("tmDebt").textContent="£"+debt.toFixed(2)+"T";
-  $("tmHouse").textContent=money(house);
-  $("tmGold").textContent=money(gold)+"/oz";
-  $("tmFuel").textContent=Math.round(fuel)+"%";
-
-  app.leakTarget=interp(y,"leaks");
-  app.leakDisplay.forEach(x=>{
-    x.value += (app.leakTarget[x.name]-x.value)*.055;
-    x.r=.24+(x.value/50)*.62;
-  });
-
-  const debtRise=((debt/app.history[2000].debt-1)*100).toFixed(0);
-  const houseRise=((house/app.history[2000].house-1)*100).toFixed(0);
-  const fuelDrop=(app.history[2000].fuel-fuel).toFixed(0);
-  $("whatChanged").innerHTML=`Since 2000: debt is up <b class="bad">+${debtRise}%</b>, average house price is up <b class="warn">+${houseRise}%</b>, and the Financial SatNav fuel tank is down <b class="bad">${fuelDrop} points</b>.`;
-  [...document.querySelectorAll(".yearTick")].forEach(el=>el.classList.toggle("active",Number(el.dataset.year)===Math.round(app.yearTarget)));
-}
-
-function drawPie(){
-  const c=$("pie"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1;
-  const rect=c.getBoundingClientRect(); c.width=rect.width*dpr; c.height=310*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-  const w=rect.width,h=310,cx=w*.43,cy=h*.48,r=Math.min(w,h)*.27;
-  ctx.clearRect(0,0,w,h);
-  let start=-Math.PI/2,total=app.leakDisplay.reduce((a,b)=>a+b.value,0);
-  app.leakDisplay.forEach((x,idx)=>{
-    const val=x.value;
-    const end=start+(val/total)*Math.PI*2;
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fillStyle=x.color;ctx.fill();
-    ctx.strokeStyle="#020403";ctx.lineWidth=2;ctx.stroke();
-    const y=52+idx*38, lx=w*.72;
-    ctx.fillStyle=x.color;ctx.fillRect(lx,y-12,14,14);
-    ctx.fillStyle="#fff";ctx.font="13px Consolas";ctx.textAlign="left";ctx.fillText(x.name,lx+22,y);
-    ctx.fillStyle=x.color;ctx.font="bold 16px Consolas";ctx.fillText(Math.round(val)+"%",lx+22,y+18);
-    start=end;
-  });
-  ctx.beginPath();ctx.arc(cx,cy,r*.5,0,Math.PI*2);ctx.fillStyle="#030805";ctx.fill();
-  ctx.fillStyle="#00ff6a";ctx.font="bold 20px Consolas";ctx.textAlign="center";ctx.fillText("LEAK",cx,cy-4);ctx.fillText("SHARE",cx,cy+20);
+function detectLeaks(now){
+  let hit = null;
+  let best = 999;
+  for(const l of app.leaks){
+    const d = Math.abs(norm(app.radarAngle-l.angle));
+    if(d < .105 && d < best){hit=l;best=d;}
+  }
+  if(hit) setActiveLeak(hit,now);
 }
 
 function drawRadar(dt,now){
-  const c=$("radar"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1;
-  const rect=c.getBoundingClientRect(); c.width=rect.width*dpr; c.height=310*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-  const w=rect.width,h=310,cx=w/2,cy=h/2,r=Math.min(w,h)*.39;
-  app.radarAngle+=dt*.00225;
-  ctx.clearRect(0,0,w,h);
+  const c=$("radar"), ctx=c.getContext("2d"), dpr=window.devicePixelRatio||1;
+  const rect=c.getBoundingClientRect();
+  c.width=rect.width*dpr; c.height=315*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=rect.width,h=315,cx=w/2,cy=h/2,r=Math.min(w,h)*.39;
 
-  ctx.save(); ctx.beginPath();ctx.arc(cx,cy,r+3,0,Math.PI*2);ctx.clip();
-  ctx.fillStyle="#020805";ctx.fillRect(cx-r-5,cy-r-5,(r+5)*2,(r+5)*2);
+  app.radarAngle += dt*.00082;
+  detectLeaks(now);
+
+  ctx.clearRect(0,0,w,h);
+  ctx.save();
+  ctx.beginPath();ctx.arc(cx,cy,r+3,0,Math.PI*2);ctx.clip();
+  ctx.fillStyle="#020805";ctx.fillRect(cx-r-6,cy-r-6,(r+6)*2,(r+6)*2);
 
   ctx.strokeStyle="#124d2c";ctx.lineWidth=1;
-  for(let i=1;i<=4;i++){ctx.beginPath();ctx.arc(cx,cy,r*i/4,0,Math.PI*2);ctx.stroke()}
-  for(let i=0;i<12;i++){const a=i*Math.PI/6;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.stroke()}
+  for(let i=1;i<=4;i++){ctx.beginPath();ctx.arc(cx,cy,r*i/4,0,Math.PI*2);ctx.stroke();}
+  for(let i=0;i<12;i++){const a=i*Math.PI/6;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.stroke();}
 
-  for(let trail=0;trail<7;trail++){
-    const alpha=.22-trail*.027;
-    ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle-trail*.09);
+  for(let trail=0;trail<10;trail++){
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle-trail*.075);
+    const alpha=.30-trail*.025;
     const grad=ctx.createRadialGradient(0,0,0,0,0,r);
     grad.addColorStop(0,`rgba(0,255,106,${alpha})`);
-    grad.addColorStop(.55,`rgba(0,255,106,${alpha*.8})`);
+    grad.addColorStop(.55,`rgba(0,255,106,${alpha*.75})`);
     grad.addColorStop(1,"rgba(0,255,106,0)");
-    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,-.12,.04);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,-.16,.035);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
     ctx.restore();
   }
-  ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle);
-  ctx.strokeStyle="rgba(190,255,210,.95)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r,0);ctx.stroke();ctx.restore();
 
-  app.leakDisplay.forEach(x=>{
-    const px=cx+Math.cos(x.a)*r*x.r,py=cy+Math.sin(x.a)*r*x.r;
-    let diff=Math.abs(Math.atan2(Math.sin(app.radarAngle-x.a),Math.cos(app.radarAngle-x.a)));
-    const hit=Math.max(0,1-diff/.22);
-    const base=Math.max(8,x.value/2.7);
-    const pulse=1+Math.sin(now/210+x.value)*.18+hit*.9;
-    ctx.beginPath();ctx.arc(px,py,base*pulse,0,Math.PI*2);ctx.fillStyle=x.color+(hit>.05?"cc":"77");ctx.fill();
-    if(hit>.05){
-      ctx.strokeStyle=x.color;ctx.lineWidth=2+hit*3;
-      ctx.beginPath();ctx.arc(px,py,base*(1.4+hit*1.7),0,Math.PI*2);ctx.stroke();
-    }
-    ctx.beginPath();ctx.arc(px,py,Math.max(3,x.value/7),0,Math.PI*2);ctx.fillStyle=x.color;ctx.fill();
-  });
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle);
+  ctx.strokeStyle="rgba(220,255,230,.98)";ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r,0);ctx.stroke();
   ctx.restore();
 
-  ctx.strokeStyle="#1aff73";ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,r+2,0,Math.PI*2);ctx.stroke();
-  ctx.fillStyle="#fff";ctx.font="12px Consolas";ctx.textAlign="center";
-  app.leakDisplay.forEach(x=>{
-    const px=cx+Math.cos(x.a)*r*x.r,py=cy+Math.sin(x.a)*r*x.r;
-    const lx=Math.max(44,Math.min(w-44,px)), ly=Math.max(18,Math.min(h-12,py-18));
-    ctx.fillText("⚠ "+x.name,lx,ly);
-  });
+  for(const l of app.leaks){
+    const px=cx+Math.cos(l.angle)*r*(.22+l.severity*.12);
+    const py=cy+Math.sin(l.angle)*r*(.22+l.severity*.12);
+    const diff=Math.abs(norm(app.radarAngle-l.angle));
+    const hit=Math.max(0,1-diff/.22);
+    const rad=(5+l.severity*3)*(1+hit*.85+Math.sin(now/220+l.severity)*.14);
+    ctx.beginPath();ctx.arc(px,py,rad,0,Math.PI*2);ctx.fillStyle=l.colour+(hit>.02?"cc":"77");ctx.fill();
+    if(hit>.02){
+      for(let ring=1;ring<=l.severity;ring++){
+        ctx.strokeStyle=l.colour;ctx.globalAlpha=Math.max(.12,.45-hit*.05);
+        ctx.lineWidth=1.2;
+        ctx.beginPath();ctx.arc(px,py,rad+ring*8*hit,0,Math.PI*2);ctx.stroke();
+        ctx.globalAlpha=1;
+      }
+    }
+    ctx.fillStyle="#fff";ctx.font="12px Consolas";ctx.textAlign="center";
+    ctx.fillText("⚠ "+l.name,Math.max(45,Math.min(w-45,px)),Math.max(18,Math.min(h-12,py-18)));
+  }
+
+  app.pulses = app.pulses.filter(p=>now-p.start<1500);
+  for(const p of app.pulses){
+    const age=(now-p.start)/1500;
+    const l=p.leak;
+    const px=cx+Math.cos(l.angle)*r*(.22+l.severity*.12);
+    const py=cy+Math.sin(l.angle)*r*(.22+l.severity*.12);
+    ctx.strokeStyle=l.colour;ctx.globalAlpha=1-age;ctx.lineWidth=2.5;
+    for(let i=0;i<l.severity;i++){ctx.beginPath();ctx.arc(px,py,20+age*75+i*14,0,Math.PI*2);ctx.stroke();}
+    ctx.globalAlpha=1;
+  }
+
+  ctx.restore();
+  ctx.strokeStyle="#1aff73";ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,r+3,0,Math.PI*2);ctx.stroke();
 }
 
-function updatePowerDecay(now){
-  const duration=5200, hold=900;
-  const t=(now%(duration+hold))/(duration+hold);
-  const progress=t<duration/(duration+hold)?Math.min(1,(t*(duration+hold))/duration):1;
-  const eased=progress<.16?0:(1-Math.pow(1-(progress-.16)/.84,2.15));
-  const value=100-(48*Math.max(0,Math.min(1,eased)));
+function drawPie(){
+  const c=$("pie"), ctx=c.getContext("2d"), dpr=window.devicePixelRatio||1;
+  const rect=c.getBoundingClientRect();
+  c.width=rect.width*dpr; c.height=315*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=rect.width,h=315,cx=w*.42,cy=h*.5,base=Math.min(w,h)*.25;
+  let start=-Math.PI/2,total=app.leaks.reduce((a,b)=>a+b.percent,0);
+  ctx.clearRect(0,0,w,h);
+  for(let i=0;i<app.leaks.length;i++){
+    const l=app.leaks[i], active=app.activeLeak && app.activeLeak.id===l.id;
+    const r=base+(active?14:0);
+    const end=start+(l.percent/total)*Math.PI*2;
+    ctx.save();ctx.globalAlpha=active?1:.35;
+    ctx.shadowColor=active?l.colour:"transparent";ctx.shadowBlur=active?28:0;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fillStyle=l.colour;ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle="#020403";ctx.lineWidth=2;ctx.stroke();
+
+    const ly=52+i*38,lx=w*.72;
+    ctx.globalAlpha=active?1:.45;
+    ctx.fillStyle=l.colour;ctx.fillRect(lx,ly-12,14,14);
+    ctx.fillStyle="#fff";ctx.font=(active?"bold ":"")+"13px Consolas";ctx.textAlign="left";ctx.fillText(l.name,lx+22,ly);
+    ctx.fillStyle=l.colour;ctx.font="bold 16px Consolas";ctx.fillText(l.percent+"%",lx+22,ly+18);
+    ctx.globalAlpha=1;
+    start=end;
+  }
+  ctx.beginPath();ctx.arc(cx,cy,base*.45,0,Math.PI*2);ctx.fillStyle="#030805";ctx.fill();
+  ctx.fillStyle="#00ff6a";ctx.font="bold 20px Consolas";ctx.textAlign="center";ctx.fillText("ACTIVE",cx,cy-5);ctx.fillText("LEAK",cx,cy+20);
+}
+
+function updatePower(now){
+  const duration=5200, hold=900, cycle=(now%(duration+hold));
+  const p=cycle<duration?cycle/duration:1;
+  const e=p<.16?0:1-Math.pow(1-(p-.16)/.84,2.2);
+  const value=100-48*Math.max(0,Math.min(1,e));
   const rounded=Math.round(value);
   $("decay").textContent="£"+rounded;
-  $("lostLine").textContent="Lost £"+(100-rounded);
-  $("decayFill").style.width=value+"%";
-  const scale=.55+.45*((value-52)/48);
-  $("decay").style.transform=`scale(${scale})`;
-  $("decay").style.color=value<62?"#ff3d4f":value<78?"#ffbf36":"#fff";
-  $("decay").style.opacity=.62+.38*((value-52)/48);
-  const blocks=Math.max(0,Math.ceil(value/10));
-  [...$("powerBlocks").children].forEach((b,i)=>b.classList.toggle("on",i<blocks));
+  $("lost").textContent="Lost £"+(100-rounded);
+  $("decayBar").style.width=value+"%";
+  $("decay").style.transform=`scale(${.55+.45*((value-52)/48)})`;
+  $("decay").style.color=value<62?"#ff4455":value<78?"#f6c344":"#fff";
+  [...$("blocks").children].forEach((b,i)=>b.classList.toggle("on",i<Math.ceil(value/10)));
 }
 
 function seedPipe(){
   const p=$("pipe"); p.innerHTML="";
-  for(let i=0;i<7;i++){
+  for(let i=0;i<9;i++){
     const s=document.createElement("span");s.className="stream";
     s.style.animationDelay=(-Math.random()*1.1)+"s";
-    s.style.animationDuration=(.75+Math.random()*.45)+"s";
     s.style.top=(42+Math.random()*14)+"%";
     p.appendChild(s);
   }
-  for(let i=0;i<34;i++){
+  for(let i=0;i<42;i++){
     const d=document.createElement("span");d.className="drop";
-    d.style.top=(48+Math.random()*22-11)+"%";
     d.style.animationDelay=(-Math.random()*1.2)+"s";
-    d.style.animationDuration=(.65+Math.random()*.7)+"s";
-    d.style.opacity=.45+Math.random()*.55;
+    d.style.top=(38+Math.random()*32)+"%";
+    d.style.opacity=.4+Math.random()*.6;
     p.appendChild(d);
   }
 }
 
-function buildRails(){
-  [2000,2005,2010,2015,2020,2026].forEach(y=>{
-    const el=document.createElement("div");el.className="yearTick";el.dataset.year=y;el.textContent=y;
-    el.onclick=()=>{$("year").value=y; app.yearTarget=y;};
-    $("yearRail").appendChild(el);
-  });
-  for(let i=0;i<10;i++) $("powerBlocks").appendChild(document.createElement("span"));
+function setup(){
+  for(let i=0;i<10;i++) $("blocks").appendChild(document.createElement("span"));
+  for(const y of [2000,2005,2010,2015,2020,2026]){
+    const b=document.createElement("button");b.textContent=y;b.dataset.y=y;
+    b.onclick=()=>{$("year").value=y;app.yearTarget=y;};
+    $("years").appendChild(b);
+  }
+  $("year").addEventListener("input",e=>app.yearTarget=Number(e.target.value));
+  seedPipe();
+  setActiveLeak(app.leaks[0],performance.now());
 }
 
 function loop(now){
   const dt=now-app.last; app.last=now;
-  app.debt+=app.debtPerSecond*(dt/1000);
-  app.interestToday+=app.interestPerSecond*(dt/1000);
-  updateTimeMachine(); updateCore(now); updatePowerDecay(now); drawRadar(dt,now); drawPie();
+  updateCore(dt,now);
+  drawRadar(dt,now);
+  drawPie();
+  updatePower(now);
   requestAnimationFrame(loop);
 }
 
-$("year").addEventListener("input",e=>{app.yearTarget=Number(e.target.value)});
-window.addEventListener("resize",()=>{drawPie()});
-buildRails(); seedPipe(); updateCore(performance.now()); updateTimeMachine(); requestAnimationFrame(loop);
+setup();
+requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>
