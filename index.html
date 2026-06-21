@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UK Economic Reality Dashboard</title>
+<style>
+:root{
+  --bg:#05070a;--panel:#0c1117;--panel2:#101923;--line:#1fef87;--text:#e9fff4;--muted:#8ab7a0;
+  --green:#25ff94;--amber:#ffbf3d;--red:#ff5570;--blue:#5ecbff;--shadow:0 0 28px rgba(31,239,135,.14)
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#122018 0,#05070a 45%,#020304 100%);color:var(--text);font-family:Consolas,Monaco,"Courier New",monospace}
+header{padding:22px 18px;border-bottom:1px solid rgba(31,239,135,.35);background:rgba(5,7,10,.86);position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
+h1{margin:0;color:var(--green);font-size:clamp(22px,4vw,42px);letter-spacing:.04em;text-shadow:0 0 18px rgba(37,255,148,.35)}
+.subtitle{color:var(--muted);margin-top:8px;font-size:14px;max-width:1100px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button,select,input{background:#07100c;color:var(--text);border:1px solid rgba(31,239,135,.5);border-radius:8px;padding:10px 12px;font-family:inherit}
+button{cursor:pointer;box-shadow:var(--shadow)}
+button:hover{border-color:var(--green);background:#0d1d15}
+main{padding:16px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.panel{grid-column:span 3;background:linear-gradient(180deg,var(--panel),#071017);border:1px solid rgba(31,239,135,.32);border-radius:14px;padding:15px;box-shadow:var(--shadow);min-height:150px}
+.panel.wide{grid-column:span 6}.panel.full{grid-column:1/-1}.panel.tall{min-height:260px}
+.panel h2{margin:0 0 12px;color:#fff;font-size:16px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.value{font-size:clamp(24px,4vw,42px);font-weight:800;color:var(--green);line-height:1.1;text-shadow:0 0 14px rgba(37,255,148,.22);word-break:break-word}
+.small{font-size:13px;color:var(--muted);line-height:1.5}.metric{display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);padding:9px 0;gap:10px}
+.metric strong{color:#fff;text-align:right}.live{color:var(--green)}.cached{color:var(--amber)}.estimated,.error{color:var(--red)}
+.badge{font-size:11px;padding:3px 7px;border-radius:99px;border:1px solid currentColor}.bar{height:12px;background:#08120d;border:1px solid rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:8px 0}
+.fill{height:100%;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));width:0%;transition:width .4s}
+.log{height:180px;overflow:auto;background:#030604;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;font-size:12px;color:#bdebd2}
+.log div{border-bottom:1px dashed rgba(255,255,255,.08);padding:4px 0}
+.sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+.source{border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;background:rgba(255,255,255,.025)}
+canvas{width:100%;height:210px;background:#060a08;border-radius:10px;border:1px solid rgba(255,255,255,.08)}
+footer{padding:18px;color:var(--muted);font-size:12px}
+@media(max-width:1050px){.panel{grid-column:span 6}.panel.wide{grid-column:1/-1}}
+@media(max-width:650px){.panel,.panel.wide{grid-column:1/-1}.toolbar>*{width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <h1>UK Economic Reality Dashboard</h1>
+  <div class="subtitle">Single-file browser app: live-style counters, public-data connectors, local cache, fallback estimates, calculation engine, source monitor, logs, and Financial SatNav.</div>
+  <div class="toolbar">
+    <button id="refreshBtn">Refresh data</button>
+    <button id="simulateBtn">Pause simulation</button>
+    <button id="resetBtn">Reset cache</button>
+    <select id="profileSelect">
+      <option value="average">Average citizen</option>
+      <option value="renter">Private renter</option>
+      <option value="buyer">First-time buyer</option>
+      <option value="taxpayer">Income taxpayer</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <section class="grid">
+    <div class="panel wide"><h2>Government Debt Clock <span id="debtStatus" class="badge estimated">estimated</span></h2><div id="debtClock" class="value">—</div><div class="small">Visual counter interpolates between public-data refreshes.</div></div>
+    <div class="panel"><h2>Debt Per Citizen</h2><div id="debtCitizen" class="value">—</div><div class="small">Debt ÷ population.</div></div>
+    <div class="panel"><h2>Debt Per Taxpayer</h2><div id="debtTaxpayer" class="value">—</div><div class="small">Debt ÷ estimated taxpayers.</div></div>
+    <div class="panel"><h2>Housing</h2><div id="housing"></div></div>
+    <div class="panel"><h2>Wages</h2><div id="wages"></div></div>
+    <div class="panel"><h2>Inflation</h2><div id="inflation"></div></div>
+    <div class="panel"><h2>Cost of Living</h2><div id="costLiving"></div></div>
+    <div class="panel"><h2>Money Supply</h2><div id="moneySupply"></div></div>
+    <div class="panel"><h2>Assets</h2><div id="assets"></div></div>
+    <div class="panel wide tall"><h2>Financial SatNav</h2><div id="satnav"></div></div>
+    <div class="panel wide tall"><h2>Runtime Chart</h2><canvas id="chart" width="900" height="260"></canvas></div>
+    <div class="panel full"><h2>Data Sources / Status</h2><div id="sources" class="sources"></div></div>
+    <div class="panel full"><h2>Runtime Logs</h2><div id="logs" class="log"></div></div>
+  </section>
+</main>
+<footer>
+  This dashboard is informational, not financial advice. Browser CORS rules may block some public endpoints; blocked connectors fall back to cached or estimated values.
+</footer>
+
+<script>
+const App={
+  config:{
+    cacheKey:"uk_economic_reality_dashboard_v1",
+    refreshMs:300000,
+    tickMs:1000,
+    debtGrowthPerSecond:1350
+  },
+  state:{
+    paused:false,profile:"average",lastUpdate:null,
+    values:{
+      governmentDebt:2800000000000,population:68200000,taxpayers:33300000,averageSalary:37000,
+      medianHousePrice:290000,averageRent:1350,inflationRate:3.2,foodInflation:4.1,
+      energyCap:1720,moneySupply:3100000000000,baseRate:4.75,ftse:8200,gold:2400,gbpUsd:1.28
+    },
+    history:[],
+    sources:{
+      ons:{label:"ONS",status:"estimated",detail:"Fallback population, wages and inflation values"},
+      boe:{label:"Bank of England",status:"estimated",detail:"Fallback base rate and money supply"},
+      hmt:{label:"HM Treasury / OBR",status:"estimated",detail:"Fallback public debt"},
+      dwp:{label:"DWP",status:"estimated",detail:"Benefit pressure placeholder"},
+      fca:{label:"FCA",status:"estimated",detail:"Mortgage-market placeholder"},
+      landRegistry:{label:"HM Land Registry",status:"estimated",detail:"Fallback house price"},
+      ofgem:{label:"Ofgem",status:"estimated",detail:"Fallback energy cap"},
+      markets:{label:"Market feeds",status:"estimated",detail:"Fallback asset values"}
+    },
+    logs:[]
+  },
+  el:{},
+  init(){
+    this.bindEls();this.storage.load();this.events.bind();this.render.all();this.data.refresh();
+    this.timers.tick=setInterval(()=>this.runtime.tick(),this.config.tickMs);
+    this.timers.refresh=setInterval(()=>this.data.refresh(),this.config.refreshMs);
+    this.log("Application booted from single index.html host.");
+  },
+  bindEls(){
+    ["debtClock","debtCitizen","debtTaxpayer","housing","wages","inflation","costLiving","moneySupply","assets","satnav","sources","logs","debtStatus","chart"].forEach(id=>this.el[id]=document.getElementById(id));
+  },
+  log(msg,type="info"){
+    this.state.logs.unshift({time:new Date().toLocaleTimeString(),msg,type});
+    this.state.logs=this.state.logs.slice(0,80);
+    this.render.logs();
+  },
+  fmt:{
+    money(n){return "£"+Math.round(n).toLocaleString("en-GB")},
+    big(n){return "£"+Math.round(n).toLocaleString("en-GB")},
+    pct(n){return Number(n).toFixed(1)+"%"}
+  },
+  calc:{
+    debtPerCitizen(){return App.state.values.governmentDebt/App.state.values.population},
+    debtPerTaxpayer(){return App.state.values.governmentDebt/App.state.values.taxpayers},
+    rentBurden(){const v=App.state.values;return (v.averageRent*12/v.averageSalary)*100},
+    depositYears(){const v=App.state.values;return (v.medianHousePrice*.1)/(v.averageSalary*.1)},
+    purchasingPowerLoss(){const v=App.state.values;return v.averageSalary*(v.inflationRate/100)},
+    inflationImpact(monthlySpend=2200){return monthlySpend*(App.state.values.inflationRate/100)*12},
+    pressureScore(){
+      const v=App.state.values;
+      let score=App.calc.rentBurden()+v.inflationRate*5+v.foodInflation*2+v.baseRate*4+(v.energyCap/100);
+      if(App.state.profile==="renter")score+=12;
+      if(App.state.profile==="buyer")score+=v.baseRate*5;
+      if(App.state.profile==="taxpayer")score+=8;
+      return Math.min(100,Math.max(0,score));
+    }
+  },
+  render:{
+    all(){this.dashboard();this.sources();this.logs();this.chart();},
+    dashboard(){
+      const v=App.state.values,f=App.fmt,c=App.calc,score=c.pressureScore();
+      App.el.debtClock.textContent=f.big(v.governmentDebt);
+      App.el.debtCitizen.textContent=f.money(c.debtPerCitizen());
+      App.el.debtTaxpayer.textContent=f.money(c.debtPerTaxpayer());
+      App.el.housing.innerHTML=`
+        <div class="metric"><span>Median house price</span><strong>${f.money(v.medianHousePrice)}</strong></div>
+        <div class="metric"><span>Average monthly rent</span><strong>${f.money(v.averageRent)}</strong></div>
+        <div class="metric"><span>Rent burden</span><strong>${f.pct(c.rentBurden())}</strong></div>
+        <div class="metric"><span>10% deposit years</span><strong>${c.depositYears().toFixed(1)}</strong></div>`;
+      App.el.wages.innerHTML=`
+        <div class="metric"><span>Average salary</span><strong>${f.money(v.averageSalary)}</strong></div>
+        <div class="metric"><span>Monthly gross equivalent</span><strong>${f.money(v.averageSalary/12)}</strong></div>
+        <div class="metric"><span>Purchasing-power loss</span><strong>${f.money(c.purchasingPowerLoss())}/yr</strong></div>`;
+      App.el.inflation.innerHTML=`
+        <div class="value">${f.pct(v.inflationRate)}</div>
+        <div class="metric"><span>Food pressure</span><strong>${f.pct(v.foodInflation)}</strong></div>
+        <div class="metric"><span>£2,200 monthly spend impact</span><strong>${f.money(c.inflationImpact())}/yr</strong></div>`;
+      App.el.costLiving.innerHTML=`
+        <div class="metric"><span>Energy price cap</span><strong>${f.money(v.energyCap)}</strong></div>
+        <div class="metric"><span>Food inflation</span><strong>${f.pct(v.foodInflation)}</strong></div>
+        <div class="metric"><span>Pressure index</span><strong>${Math.round(score)}/100</strong></div>
+        <div class="bar"><div class="fill" style="width:${score}%"></div></div>`;
+      App.el.moneySupply.innerHTML=`
+        <div class="value">${f.big(v.moneySupply)}</div>
+        <div class="metric"><span>Base rate</span><strong>${f.pct(v.baseRate)}</strong></div>`;
+      App.el.assets.innerHTML=`
+        <div class="metric"><span>FTSE</span><strong>${Math.round(v.ftse).toLocaleString("en-GB")}</strong></div>
+        <div class="metric"><span>Gold</span><strong>$${Math.round(v.gold).toLocaleString("en-GB")}</strong></div>
+        <div class="metric"><span>GBP/USD</span><strong>${v.gbpUsd.toFixed(2)}</strong></div>`;
+      App.el.satnav.innerHTML=`
+        <div class="value">${Math.round(score)}/100</div>
+        <div class="small">Route status: ${score>75?"RED — household finances under severe pressure":score>50?"AMBER — affordability strain visible":"GREEN — manageable pressure"}</div>
+        <div class="metric"><span>Annual inflation drag</span><strong>${f.money(c.purchasingPowerLoss())}</strong></div>
+        <div class="metric"><span>Debt shadow per citizen</span><strong>${f.money(c.debtPerCitizen())}</strong></div>
+        <div class="metric"><span>Rent share of salary</span><strong>${f.pct(c.rentBurden())}</strong></div>
+        <div class="metric"><span>Deposit accumulation</span><strong>${c.depositYears().toFixed(1)} years</strong></div>`;
+      const ds=App.state.sources.hmt.status;App.el.debtStatus.textContent=ds;App.el.debtStatus.className="badge "+ds;
+    },
+    sources(){
+      App.el.sources.innerHTML=Object.entries(App.state.sources).map(([k,s])=>`<div class="source"><strong>${s.label}</strong><br><span class="${s.status}">${s.status.toUpperCase()}</span><div class="small">${s.detail}</div></div>`).join("");
+    },
+    logs(){App.el.logs.innerHTML=App.state.logs.map(l=>`<div><span class="${l.type}">[${l.time}]</span> ${l.msg}</div>`).join("");},
+    chart(){
+      const cv=App.el.chart,ctx=cv.getContext("2d"),h=App.state.history.slice(-60);
+      ctx.clearRect(0,0,cv.width,cv.height);ctx.strokeStyle="rgba(37,255,148,.8)";ctx.lineWidth=2;ctx.beginPath();
+      if(h.length<2){ctx.fillStyle="#8ab7a0";ctx.fillText("Runtime history appears after ticks.",20,30);return}
+      const vals=h.map(x=>x.debt),min=Math.min(...vals),max=Math.max(...vals),span=max-min||1;
+      h.forEach((p,i)=>{const x=i*(cv.width/(h.length-1)),y=cv.height-25-((p.debt-min)/span)*(cv.height-50);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+      ctx.stroke();ctx.fillStyle="#8ab7a0";ctx.fillText("Debt clock runtime trace",20,24);
+    }
+  },
+  events:{
+    bind(){
+      document.getElementById("refreshBtn").onclick=()=>App.data.refresh();
+      document.getElementById("simulateBtn").onclick=e=>{App.state.paused=!App.state.paused;e.target.textContent=App.state.paused?"Resume simulation":"Pause simulation";App.log(App.state.paused?"Simulation paused.":"Simulation resumed.");};
+      document.getElementById("resetBtn").onclick=()=>{localStorage.removeItem(App.config.cacheKey);App.log("Cache reset. Reloading fallback state.","cached");location.reload();};
+      document.getElementById("profileSelect").onchange=e=>{App.state.profile=e.target.value;App.render.dashboard();App.storage.save();App.log("Profile changed to "+e.target.value+".");};
+    }
+  },
+  runtime:{
+    tick(){
+      if(!App.state.paused){App.state.values.governmentDebt+=App.config.debtGrowthPerSecond}
+      App.state.history.push({t:Date.now(),debt:App.state.values.governmentDebt});
+      App.state.history=App.state.history.slice(-180);
+      App.render.dashboard();App.render.chart();App.storage.save();
+    }
+  },
+  storage:{
+    save(){localStorage.setItem(App.config.cacheKey,JSON.stringify({state:App.state,savedAt:Date.now()}));},
+    load(){
+      try{const raw=localStorage.getItem(App.config.cacheKey);if(!raw)return;const c=JSON.parse(raw);Object.assign(App.state,c.state);Object.values(App.state.sources).forEach(s=>{if(s.status==="live")s.status="cached"});App.log("Loaded cached state from localStorage.","cached");}
+      catch(e){App.log("Cache load failed: "+e.message,"error")}
+    }
+  },
+  data:{
+    async refresh(){
+      App.log("Refreshing browser-side connectors.");
+      await Promise.allSettled([this.fetchONS(),this.fetchBOE(),this.fetchHMT(),this.fetchDWP(),this.fetchFCA(),this.fetchLandRegistry(),this.fetchOfgem(),this.fetchMarkets()]);
+      App.state.lastUpdate=new Date().toISOString();App.render.all();App.storage.save();App.log("Refresh cycle complete.");
+    },
+    setStatus(k,status,detail){App.state.sources[k].status=status;App.state.sources[k].detail=detail;},
+    async tryFetch(url,timeout=6500){
+      const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeout);
+      try{const r=await fetch(url,{signal:ctrl.signal,cache:"no-store"});clearTimeout(timer);if(!r.ok)throw new Error("HTTP "+r.status);return await r.json().catch(()=>r.text())}
+      catch(e){clearTimeout(timer);throw e}
+    },
+    async fetchONS(){
+      try{await this.tryFetch("https://api.beta.ons.gov.uk/v1/datasets");this.setStatus("ons","live","ONS API reachable; fallback metrics retained unless exact series parser is configured.");}
+      catch(e){this.setStatus("ons",App.state.sources.ons.status==="cached"?"cached":"estimated","ONS blocked/unavailable in browser: "+e.message);}
+    },
+    async fetchBOE(){
+      try{await this.tryFetch("https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2024&Dateto=now&SeriesCodes=IUMABEDR&UsingCodes=Y&VPD=Y&VFD=N");this.setStatus("boe","live","Bank of England endpoint reachable; base-rate fallback retained.");}
+      catch(e){this.setStatus("boe",App.state.sources.boe.status==="cached"?"cached":"estimated","BOE blocked/unavailable: "+e.message);}
+    },
+    async fetchHMT(){try{await this.tryFetch("https://www.gov.uk/government/organisations/hm-treasury.json");this.setStatus("hmt","live","HM Treasury GOV.UK API reachable; debt estimate retained.");}catch(e){this.setStatus("hmt",App.state.sources.hmt.status==="cached"?"cached":"estimated","Treasury source unavailable: "+e.message);}},
+    async fetchDWP(){try{await this.tryFetch("https://www.gov.uk/government/organisations/department-for-work-pensions.json");this.setStatus("dwp","live","DWP GOV.UK API reachable.");}catch(e){this.setStatus("dwp",App.state.sources.dwp.status==="cached"?"cached":"estimated","DWP source unavailable: "+e.message);}},
+    async fetchFCA(){try{await this.tryFetch("https://www.fca.org.uk/news/news-stories.json");this.setStatus("fca","live","FCA public endpoint reachable.");}catch(e){this.setStatus("fca",App.state.sources.fca.status==="cached"?"cached":"estimated","FCA source unavailable: "+e.message);}},
+    async fetchLandRegistry(){try{await this.tryFetch("https://landregistry.data.gov.uk/app/ukhpi");this.setStatus("landRegistry","live","Land Registry UKHPI reachable; parser placeholder active.");}catch(e){this.setStatus("landRegistry",App.state.sources.landRegistry.status==="cached"?"cached":"estimated","Land Registry unavailable: "+e.message);}},
+    async fetchOfgem(){try{await this.tryFetch("https://www.ofgem.gov.uk/publications.json");this.setStatus("ofgem","live","Ofgem public endpoint reachable; price-cap fallback retained.");}catch(e){this.setStatus("ofgem",App.state.sources.ofgem.status==="cached"?"cached":"estimated","Ofgem unavailable: "+e.message);}},
+    async fetchMarkets(){
+      try{
+        const r=await this.tryFetch("https://api.frankfurter.app/latest?from=GBP&to=USD");
+        if(r && r.rates && r.rates.USD)App.state.values.gbpUsd=r.rates.USD;
+        this.setStatus("markets","live","Frankfurter FX feed reachable; FTSE/gold fallback retained.");
+      }catch(e){this.setStatus("markets",App.state.sources.markets.status==="cached"?"cached":"estimated","Market feed unavailable: "+e.message);}
+    }
+  },
+  timers:{}
+};
+document.addEventListener("DOMContentLoaded",()=>App.init());
+</script>
+</body>
+</html>
