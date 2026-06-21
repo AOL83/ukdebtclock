@@ -1,109 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UK Economic Reality Clock</title>
+<title>UK Economic Instrument Panel</title>
 <style>
-:root{
---bg:#020202;--panel:#0b0b0b;--green:#00ff66;--red:#ff4d4d;--amber:#ffb300;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--green);font-family:Consolas,monospace}
-.header{text-align:center;padding:12px;border-bottom:1px solid #222}
-.hero{padding:20px;text-align:center}
-.hero h1{margin:0;font-size:2rem;color:#fff}
-.big-number{font-size:clamp(2rem,6vw,5rem);font-weight:700;color:var(--green)}
-.rate{color:var(--red);font-size:1.2rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;padding:10px}
-.panel{background:var(--panel);border:1px solid #1f1f1f;padding:12px}
-.title{color:#fff;font-size:.9rem;margin-bottom:6px}
-.value{font-size:2rem}
-.warning{color:var(--red)}
-.amber{color:var(--amber)}
-.fuel{height:30px;background:#111;border:1px solid #333;overflow:hidden}
-.fuelbar{height:100%;background:linear-gradient(90deg,#ff4d4d,#ffb300,#00ff66)}
-.log{height:180px;overflow:auto;font-size:.8rem;background:#000;padding:8px}
-footer{text-align:center;padding:10px;color:#888}
+body{margin:0;background:#000;color:#00ff66;font-family:Consolas,monospace}
+.header{text-align:center;padding:10px;border-bottom:1px solid #0f0}
+.hero{padding:10px;text-align:center}
+.hero .num{font-size:min(8vw,72px);font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;padding:6px}
+.card{border:1px solid #0f0;background:#050505;padding:8px}
+.t{color:#fff;font-size:12px}
+.v{font-size:28px;font-weight:bold}
+.red{color:#ff5555}.amber{color:#ffb300}.white{color:#fff}
+.fuel{height:24px;background:#111;border:1px solid #333}
+.bar{height:100%;background:#00ff66}
+.small{font-size:12px}
 </style>
 </head>
 <body>
-<div class="header"><h2>UK ECONOMIC REALITY CLOCK</h2></div>
-
+<div class="header"><h1>UK ECONOMIC INSTRUMENT PANEL™</h1></div>
 <div class="hero">
-<h1>NATIONAL DEBT</h1>
-<div id="debt" class="big-number"></div>
-<div id="debtRate" class="rate"></div>
+<div class="white">UK NATIONAL DEBT</div>
+<div id="debt" class="num"></div>
+<div id="rate" class="red"></div>
 </div>
 
-<div class="grid">
-<div class="panel"><div class="title">Debt Per Citizen</div><div id="citizen" class="value"></div></div>
-<div class="panel"><div class="title">Debt Per Taxpayer</div><div id="taxpayer" class="value"></div></div>
-<div class="panel"><div class="title">Debt Interest Today</div><div id="interest" class="value warning"></div></div>
-<div class="panel"><div class="title">£100 in 2000</div><div id="pp" class="value amber"></div></div>
-<div class="panel"><div class="title">Average House Deposit</div><div id="deposit" class="value"></div></div>
-<div class="panel"><div class="title">Years To Save Deposit</div><div id="years" class="value"></div></div>
-<div class="panel"><div class="title">Rent Share Of Salary</div><div id="rent" class="value warning"></div></div>
-<div class="panel"><div class="title">Energy Cost</div><div id="energy" class="value"></div></div>
-<div class="panel" style="grid-column:span 2">
-<div class="title">Financial SatNav Fuel Tank</div>
-<div class="fuel"><div id="fuelbar" class="fuelbar"></div></div>
-<div id="fueltxt" class="value"></div>
-<div id="loss"></div>
-</div>
-<div class="panel" style="grid-column:span 2">
-<div class="title">System Log</div>
-<div id="log" class="log"></div>
-</div>
-</div>
-
-<footer>Single-file browser application</footer>
+<div class="grid" id="metrics"></div>
 
 <script>
-const state={
-debt:3104672883219,
-debtPerSecond:5842,
-population:68000000,
-taxpayers:33000000,
-interestToday:328447192,
-inflationLoss:52,
-deposit:48000,
-salary:37000,
-rent:1350,
-energy:1720,
-fuel:41,
-valueLost:18740
+const s={
+debt:3104672883219,debtps:5842,pop:68000000,tax:33000000,
+interest:328447192,salary:37000,rent:1350,deposit:48000,
+fuel:41,lost:18740
 };
 
-function log(msg){
- const el=document.getElementById('log');
- el.innerHTML=new Date().toLocaleTimeString()+" - "+msg+"<br>"+el.innerHTML;
-}
+const metrics=[
+["Debt Per Citizen",()=>fmt(s.debt/s.pop)],
+["Debt Per Taxpayer",()=>fmt(s.debt/s.tax)],
+["Debt Interest Today",()=>fmt(s.interest)],
+["£100 In 2000",()=>"£52"],
+["House Deposit",()=>fmt(s.deposit)],
+["Years To Save",()=>(s.deposit/(s.salary*.1)).toFixed(1)],
+["Rent Burden",()=>((s.rent*12/s.salary)*100).toFixed(0)+"%"],
+["Energy Bill","£1,720"],
+["Weekly Shop","+£38"],
+["First Home Age","34"],
+["Mortgage","£248,000"],
+["Tax Freedom Days","174"],
+["House Prices Since 2000","+312%"],
+["Gold Since 2000","+640%"],
+["Money Supply Since 2000","+390%"],
+["Savings Purchasing Power","-48%"],
+["Food Inflation","+31%"],
+["Real Wage Growth","-6%"],
+["Pension Gap","£142,000"],
+["Value Lost Since 2020",()=>fmt(s.lost)],
+["Main Leak","Housing"],
+["Fuel Tank",()=>s.fuel+"%"],
+["Inflation","3.2%"],
+["Base Rate","4.75%"],
+["Population","68M"],
+["Taxpayers","33M"],
+["GDP Per Capita","£37k"],
+["Home Ownership","63%"],
+["Renters","10.6M"],
+["Energy Leak","£2,700"],
+["Food Leak","£3,900"],
+["Tax Leak","£2,400"],
+["Housing Leak","£8,200"],
+["Other Leak","£1,540"],
+["FTSE","8,200"],
+["Gold","£2,400/oz"],
+["GBP/USD","1.28"],
+["National Insurance","8%"],
+["State Pension","£11,500"],
+["Council Tax Avg","£2,171"]
+];
+
+function fmt(n){return "£"+Math.round(n).toLocaleString()}
 
 function render(){
- document.getElementById('debt').textContent='£'+Math.round(state.debt).toLocaleString();
- document.getElementById('debtRate').textContent='+'+state.debtPerSecond.toLocaleString()+'/sec';
- document.getElementById('citizen').textContent='£'+Math.round(state.debt/state.population).toLocaleString();
- document.getElementById('taxpayer').textContent='£'+Math.round(state.debt/state.taxpayers).toLocaleString();
- document.getElementById('interest').textContent='£'+state.interestToday.toLocaleString();
- document.getElementById('pp').textContent='£'+state.inflationLoss;
- document.getElementById('deposit').textContent='£'+state.deposit.toLocaleString();
- document.getElementById('years').textContent=(state.deposit/(state.salary*0.1)).toFixed(1)+' yrs';
- document.getElementById('rent').textContent=((state.rent*12/state.salary)*100).toFixed(0)+'%';
- document.getElementById('energy').textContent='£'+state.energy.toLocaleString();
- document.getElementById('fuelbar').style.width=state.fuel+'%';
- document.getElementById('fueltxt').textContent='Fuel Tank: '+state.fuel+'%';
- document.getElementById('loss').textContent='Value Lost Since 2020: £'+state.valueLost.toLocaleString();
+document.getElementById('debt').textContent=fmt(s.debt);
+document.getElementById('rate').textContent='+'+s.debtps.toLocaleString()+'/sec';
+const g=document.getElementById('metrics');
+g.innerHTML='';
+metrics.forEach(m=>{
+ const v=typeof m[1]==='function'?m[1]():m[1];
+ const d=document.createElement('div');
+ d.className='card';
+ d.innerHTML='<div class=t>'+m[0]+'</div><div class=v>'+v+'</div>';
+ g.appendChild(d);
+});
+const fuel=document.createElement('div');
+fuel.className='card';
+fuel.innerHTML='<div class=t>Financial SatNav</div><div class=fuel><div class=bar style="width:'+s.fuel+'%"></div></div><div class=v>'+s.fuel+'%</div><div class=small>Value Lost: '+fmt(s.lost)+'</div>';
+g.appendChild(fuel);
 }
 
 setInterval(()=>{
- state.debt+=state.debtPerSecond;
- state.interestToday+=13;
+ s.debt+=s.debtps;
+ s.interest+=13;
  render();
 },1000);
 
 render();
-log('Runtime started');
 </script>
 </body>
 </html>
