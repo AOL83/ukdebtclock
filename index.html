@@ -27,7 +27,8 @@ h1{margin:0;color:#fff;letter-spacing:2px;font-size:clamp(18px,3vw,34px)}
 .digitRoll.bump{transform:translateY(-.08em);filter:brightness(1.45)}
 .rate{color:var(--red);font-size:clamp(14px,2vw,24px);position:relative;z-index:1}
 .grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:10px;margin-top:10px}
-.panel{border:1px solid #124d2c;background:rgba(5,14,9,.94);padding:12px;min-height:330px;box-shadow:inset 0 0 30px rgba(0,0,0,.5);overflow:hidden;position:relative}
+.panel{border:1px solid #124d2c;background:rgba(5,14,9,.94);padding:12px;min-height:340px;box-shadow:inset 0 0 30px rgba(0,0,0,.5);overflow:hidden;position:relative}
+.panel.feature{box-shadow:inset 0 0 34px rgba(0,255,106,.08),0 0 22px rgba(0,255,106,.06);border-color:#1c7f45}
 .panel h2{margin:0 0 10px;color:#fff;font-size:15px;letter-spacing:1px;text-transform:uppercase}
 canvas,svg{width:100%;display:block}
 .row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
@@ -35,20 +36,26 @@ canvas,svg{width:100%;display:block}
 .tile .t{color:var(--muted);font-size:11px;text-transform:uppercase}
 .tile .v{font-size:clamp(20px,2.2vw,36px);font-weight:800;color:var(--green2);font-variant-numeric:tabular-nums}
 .warn{color:var(--amber)!important}.bad{color:var(--red)!important}
-.gaugebox{display:grid;place-items:center;height:242px;margin-top:4px}
-.alertLine{height:22px;text-align:center;color:var(--red);font-size:12px;letter-spacing:2px;text-transform:uppercase;animation:alertPulse 1.05s ease-in-out infinite}
-@keyframes alertPulse{50%{opacity:.28}}
+.gaugebox{display:grid;place-items:center;height:250px;margin-top:4px}
+.alertLine{height:22px;text-align:center;color:var(--red);font-size:12px;letter-spacing:2px;text-transform:uppercase;animation:alertPulse .85s ease-in-out infinite}
+@keyframes alertPulse{50%{opacity:.18;text-shadow:0 0 16px var(--red)}}
 .gaugeCaption{text-align:center;color:var(--muted);font-size:12px;line-height:1.35;max-width:460px;margin:2px auto 0}
+#fuelNeedle{transition:filter .2s;filter:drop-shadow(0 0 7px #fff)}
 .sliderbox{padding-top:6px}
 input[type=range]{width:100%;accent-color:var(--green)}
 .timeline{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
-.ppwrap{height:245px;display:flex;align-items:center;justify-content:center;gap:18px;flex-direction:column}
+.yearRail{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:8px 0 0}
+.yearTick{border:1px solid #163d26;text-align:center;padding:4px 2px;color:#6f8d7a;font-size:11px;background:#020604}
+.yearTick.active{color:#fff;border-color:var(--green);box-shadow:0 0 12px rgba(0,255,106,.22)}
+.ppwrap{height:255px;display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column}
 .note{color:var(--muted);font-size:12px;line-height:1.35}
-.decay{font-size:clamp(44px,8vw,92px);font-weight:900;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.35);transform-origin:center;font-variant-numeric:tabular-nums;transition:color .08s linear,transform .08s linear,opacity .08s linear,filter .08s linear}
-.decayLabel{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:-10px}
-.decayLost{font-size:clamp(18px,2.6vw,30px);font-weight:900;color:var(--red);font-variant-numeric:tabular-nums;text-shadow:0 0 12px rgba(255,61,79,.35)}
+.decay{font-size:clamp(44px,8vw,92px);font-weight:900;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.35);transform-origin:center;font-variant-numeric:tabular-nums}
+.lostLine{font-size:18px;color:var(--red);font-weight:800;min-height:24px}
+.powerBlocks{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;width:86%;height:28px}
+.powerBlocks span{border:1px solid #324537;background:#101510;box-shadow:inset 0 0 10px rgba(0,0,0,.55)}
+.powerBlocks span.on{background:linear-gradient(180deg,#10ff75,#c9e93b,#ffbf36);box-shadow:0 0 10px rgba(0,255,106,.25)}
 .decaybar{height:22px;width:86%;border:1px solid #333;background:#111;overflow:hidden;position:relative}
-.decaybar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));transition:width .08s linear}
+.decaybar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--amber));transition:width .04s linear}
 .decaybar:after{content:"£52 today";position:absolute;right:8px;top:2px;color:#000;font-weight:bold;font-size:12px}
 .leakpipe{height:136px;border:1px solid #3d1318;position:relative;overflow:hidden;background:radial-gradient(circle at 12% 50%,#471119 0,#170406 40%,#080202 100%);border-radius:12px}
 .leakpipe:before{content:"";position:absolute;left:4%;right:4%;top:48%;height:34px;border-radius:20px;background:linear-gradient(90deg,#2b070b,#64111a,#2b070b);box-shadow:0 0 22px rgba(255,61,79,.35) inset,0 0 18px rgba(255,61,79,.18);transform:translateY(-50%)}
@@ -60,7 +67,7 @@ input[type=range]{width:100%;accent-color:var(--green)}
 .changeBox{border:1px solid #123820;background:#030805;padding:10px;margin-top:10px;color:#dfffe8;font-size:12px;line-height:1.45;min-height:58px}
 .status{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:11px}
 .pill{border:1px solid #1d6138;padding:4px 7px;background:#020503}
-@media(max-width:1000px){.grid{grid-template-columns:1fr}.row{grid-template-columns:repeat(2,1fr)}.panel{min-height:auto}.big{letter-spacing:-2px}.gaugebox{height:220px}}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}.row{grid-template-columns:repeat(2,1fr)}.panel{min-height:auto}.big{letter-spacing:-2px}.gaugebox{height:225px}}
 </style>
 </head>
 <body>
@@ -84,7 +91,7 @@ input[type=range]{width:100%;accent-color:var(--green)}
   </div>
 
   <main class="grid">
-    <section class="panel">
+    <section class="panel feature">
       <h2>Financial SatNav Fuel Gauge</h2>
       <div id="fuelAlert" class="alertLine">Low financial fuel</div>
       <div class="gaugebox">
@@ -107,29 +114,29 @@ input[type=range]{width:100%;accent-color:var(--green)}
           <text id="fuelGaugeText" x="160" y="135" fill="#fff" text-anchor="middle" font-size="34" font-weight="900">41%</text>
         </svg>
       </div>
-      <div class="gaugeCaption">Household pressure converted into one fuel reading. Lower fuel means more income is leaking into essentials.</div>
+      <div class="gaugeCaption">Live stress gauge with smooth needle drift, micro-jitter and low-fuel warning pulse.</div>
     </section>
 
-    <section class="panel">
+    <section class="panel feature">
       <h2>Leak Radar Scanner</h2>
       <canvas id="radar" height="310"></canvas>
-      <div class="note">Contained radar sweep, pulsing threat returns, and leak labels inside the radar display.</div>
+      <div class="note">Active scanner: beam persistence, threat pings and stronger returns for bigger household leaks.</div>
     </section>
 
     <section class="panel">
       <h2>Leak Pie</h2>
       <canvas id="pie" height="310"></canvas>
-      <div class="note">Visual pressure share: Housing, Food, Energy, Tax, Other.</div>
+      <div class="note">Pie rebalances with the Time Machine as household pressure shifts through history.</div>
     </section>
 
     <section class="panel">
       <h2>Purchasing Power Decay</h2>
       <div class="ppwrap">
-        <div id="decayLabel" class="decayLabel">Starting purchasing power</div>
         <div id="decay" class="decay">£100</div>
-        <div id="decayLost" class="decayLost">Lost £0</div>
-        <div class="decaybar"><span id="decayBar"></span></div>
-        <div class="note">The headline value now counts down from £100 to £52 while the lost value rises to £48.</div>
+        <div id="lostLine" class="lostLine">Lost £0</div>
+        <div id="powerBlocks" class="powerBlocks"></div>
+        <div class="decaybar"><span id="decayFill"></span></div>
+        <div class="note">The number, blocks and bar decay together from £100 purchasing power toward £52 today.</div>
       </div>
     </section>
 
@@ -137,8 +144,8 @@ input[type=range]{width:100%;accent-color:var(--green)}
       <h2>Housing Leak Animation</h2>
       <div class="leakpipe" id="pipe"></div>
       <div class="row" style="grid-template-columns:repeat(2,1fr);margin-top:8px">
-        <div class="tile"><div class="t">Housing Leak</div><div class="v bad">£8,200</div></div>
-        <div class="tile"><div class="t">Main Leak</div><div class="v bad">Housing</div></div>
+        <div class="tile"><div class="t">Housing Leak</div><div id="housingLeak" class="v bad">£8,200</div></div>
+        <div class="tile"><div class="t">Main Leak</div><div id="mainLeak" class="v bad">Housing</div></div>
       </div>
     </section>
 
@@ -147,6 +154,7 @@ input[type=range]{width:100%;accent-color:var(--green)}
       <div class="sliderbox">
         <input id="year" type="range" min="2000" max="2026" value="2026" step="1">
         <div class="timeline"><span>2000</span><span id="yearLabel">2026</span><span>2026</span></div>
+        <div id="yearRail" class="yearRail"></div>
       </div>
       <div class="row" style="grid-template-columns:repeat(2,1fr);margin-top:12px">
         <div class="tile"><div class="t">Debt</div><div id="tmDebt" class="v"></div></div>
@@ -161,40 +169,31 @@ input[type=range]{width:100%;accent-color:var(--green)}
   <div class="status">
     <span class="pill">Runtime: requestAnimationFrame</span>
     <span class="pill">Mode: animated systems</span>
-    <span class="pill">Data: built-in estimates / API-ready</span>
+    <span class="pill">Time Machine: interconnected</span>
     <span class="pill">Deploy: one static HTML file</span>
   </div>
 </div>
 
 <script>
 const app={
-  debt:3104672883219,
-  lastDebtText:"",
-  debtPerSecond:5842,
-  interestToday:328447192,
-  interestPerSecond:13,
-  population:68000000,
-  taxpayers:33000000,
-  fuelTarget:41,
-  fuelDisplay:41,
-  yearTarget:2026,
-  yearDisplay:2026,
-  last:performance.now(),
-  radarAngle:0,
-  leaks:[
+  debt:3104672883219,lastDebtText:"",debtPerSecond:5842,interestToday:328447192,interestPerSecond:13,
+  population:68000000,taxpayers:33000000,fuelTarget:41,fuelDisplay:41,yearTarget:2026,yearDisplay:2026,
+  last:performance.now(),radarAngle:0,pingGlow:0,ppValue:100,
+  leakDisplay:[
     {name:"Housing",value:44,color:"#ff3d4f",r:.77,a:-.38},
     {name:"Food",value:21,color:"#ffbf36",r:.57,a:2.55},
     {name:"Energy",value:15,color:"#4dd7ff",r:.45,a:1.25},
     {name:"Tax",value:13,color:"#ff7a3d",r:.64,a:3.72},
     {name:"Other",value:7,color:"#76ff9d",r:.32,a:5.12}
   ],
+  leakTarget:null,
   history:{
-    2000:{debt:.36,house:85000,gold:180,fuel:89},
-    2005:{debt:.48,house:158000,gold:260,fuel:78},
-    2010:{debt:1.0,house:168000,gold:780,fuel:68},
-    2015:{debt:1.6,house:195000,gold:760,fuel:61},
-    2020:{debt:2.1,house:235000,gold:1400,fuel:52},
-    2026:{debt:3.1,house:290000,gold:2400,fuel:41}
+    2000:{debt:.36,house:85000,gold:180,fuel:89,leaks:{Housing:29,Food:18,Energy:10,Tax:26,Other:17}},
+    2005:{debt:.48,house:158000,gold:260,fuel:78,leaks:{Housing:35,Food:17,Energy:11,Tax:24,Other:13}},
+    2010:{debt:1.0,house:168000,gold:780,fuel:68,leaks:{Housing:37,Food:18,Energy:12,Tax:21,Other:12}},
+    2015:{debt:1.6,house:195000,gold:760,fuel:61,leaks:{Housing:39,Food:18,Energy:13,Tax:19,Other:11}},
+    2020:{debt:2.1,house:235000,gold:1400,fuel:52,leaks:{Housing:42,Food:19,Energy:14,Tax:16,Other:9}},
+    2026:{debt:3.1,house:290000,gold:2400,fuel:41,leaks:{Housing:44,Food:21,Energy:15,Tax:13,Other:7}}
   }
 };
 
@@ -209,11 +208,8 @@ function odometer(el,text){
     if(/\d/.test(c)) out+=`<span class="digitRoll ${c!==old?'bump':''}">${c}</span>`;
     else out+=c;
   }
-  el.innerHTML=out;
-  app.lastDebtText=text;
-  $("debtWall").classList.remove("pulse");
-  void $("debtWall").offsetWidth;
-  $("debtWall").classList.add("pulse");
+  el.innerHTML=out; app.lastDebtText=text;
+  $("debtWall").classList.remove("pulse"); void $("debtWall").offsetWidth; $("debtWall").classList.add("pulse");
 }
 
 function interp(year,key){
@@ -221,26 +217,35 @@ function interp(year,key){
   let a=years[0],b=years.at(-1);
   for(let i=0;i<years.length-1;i++){if(year>=years[i]&&year<=years[i+1]){a=years[i];b=years[i+1];break}}
   const t=(year-a)/(b-a||1);
+  if(key==="leaks"){
+    const out={};
+    Object.keys(app.history[a].leaks).forEach(k=>out[k]=app.history[a].leaks[k]+(app.history[b].leaks[k]-app.history[a].leaks[k])*t);
+    return out;
+  }
   return app.history[a][key]+(app.history[b][key]-app.history[a][key])*t;
 }
 
-function updateCore(){
+function updateCore(now){
   odometer($("debt"),money(app.debt));
   $("debtRate").textContent="+"+money(app.debtPerSecond)+"/sec";
   $("interestToday").textContent=money(app.interestToday);
   $("perCitizen").textContent=money(app.debt/app.population);
   $("perTaxpayer").textContent=money(app.debt/app.taxpayers);
-  app.fuelDisplay += (app.fuelTarget-app.fuelDisplay)*.035;
+
+  app.fuelTarget=interp(app.yearDisplay,"fuel");
+  app.fuelDisplay += (app.fuelTarget-app.fuelDisplay)*.045;
+  const jitter=(Math.sin(now/180)*.7)+(Math.sin(now/73)*.28);
   const fuel=Math.round(app.fuelDisplay);
   $("fuelText").textContent=fuel+"%";
   $("fuelGaugeText").textContent=fuel+"%";
-  const deg=-90+(app.fuelDisplay/100)*180;
+  const deg=-90+(app.fuelDisplay/100)*180+jitter;
   $("fuelNeedle").setAttribute("transform",`rotate(${deg} 160 165)`);
-  $("fuelAlert").style.visibility=fuel<45?"visible":"hidden";
+  $("fuelNeedle").style.filter=fuel<50?`drop-shadow(0 0 ${9+Math.sin(now/95)*5}px #ff3d4f)`:"drop-shadow(0 0 7px #fff)";
+  $("fuelAlert").style.visibility=fuel<50?"visible":"hidden";
 }
 
 function updateTimeMachine(){
-  app.yearDisplay += (app.yearTarget-app.yearDisplay)*.09;
+  app.yearDisplay += (app.yearTarget-app.yearDisplay)*.085;
   const y=app.yearDisplay;
   $("yearLabel").textContent=Math.round(y);
   const debt=interp(y,"debt"),house=interp(y,"house"),gold=interp(y,"gold"),fuel=interp(y,"fuel");
@@ -248,73 +253,108 @@ function updateTimeMachine(){
   $("tmHouse").textContent=money(house);
   $("tmGold").textContent=money(gold)+"/oz";
   $("tmFuel").textContent=Math.round(fuel)+"%";
+
+  app.leakTarget=interp(y,"leaks");
+  app.leakDisplay.forEach(x=>{
+    x.value += (app.leakTarget[x.name]-x.value)*.055;
+    x.r=.24+(x.value/50)*.62;
+  });
+
   const debtRise=((debt/app.history[2000].debt-1)*100).toFixed(0);
   const houseRise=((house/app.history[2000].house-1)*100).toFixed(0);
   const fuelDrop=(app.history[2000].fuel-fuel).toFixed(0);
   $("whatChanged").innerHTML=`Since 2000: debt is up <b class="bad">+${debtRise}%</b>, average house price is up <b class="warn">+${houseRise}%</b>, and the Financial SatNav fuel tank is down <b class="bad">${fuelDrop} points</b>.`;
+  [...document.querySelectorAll(".yearTick")].forEach(el=>el.classList.toggle("active",Number(el.dataset.year)===Math.round(app.yearTarget)));
 }
 
 function drawPie(){
   const c=$("pie"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1;
-  const rect=c.getBoundingClientRect(); c.width=rect.width*dpr; c.height=310*dpr; ctx.scale(dpr,dpr);
+  const rect=c.getBoundingClientRect(); c.width=rect.width*dpr; c.height=310*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
   const w=rect.width,h=310,cx=w*.43,cy=h*.48,r=Math.min(w,h)*.27;
   ctx.clearRect(0,0,w,h);
-  let start=-Math.PI/2,total=app.leaks.reduce((a,b)=>a+b.value,0);
-  app.leaks.forEach((x,idx)=>{
-    const end=start+(x.value/total)*Math.PI*2;
+  let start=-Math.PI/2,total=app.leakDisplay.reduce((a,b)=>a+b.value,0);
+  app.leakDisplay.forEach((x,idx)=>{
+    const val=x.value;
+    const end=start+(val/total)*Math.PI*2;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fillStyle=x.color;ctx.fill();
     ctx.strokeStyle="#020403";ctx.lineWidth=2;ctx.stroke();
     const y=52+idx*38, lx=w*.72;
     ctx.fillStyle=x.color;ctx.fillRect(lx,y-12,14,14);
-    ctx.fillStyle="#fff";ctx.font="13px Consolas";ctx.textAlign="left";
-    ctx.fillText(`${x.name}`,lx+22,y);
-    ctx.fillStyle=x.color;ctx.font="bold 16px Consolas";ctx.fillText(`${x.value}%`,lx+22,y+18);
+    ctx.fillStyle="#fff";ctx.font="13px Consolas";ctx.textAlign="left";ctx.fillText(x.name,lx+22,y);
+    ctx.fillStyle=x.color;ctx.font="bold 16px Consolas";ctx.fillText(Math.round(val)+"%",lx+22,y+18);
     start=end;
   });
   ctx.beginPath();ctx.arc(cx,cy,r*.5,0,Math.PI*2);ctx.fillStyle="#030805";ctx.fill();
   ctx.fillStyle="#00ff6a";ctx.font="bold 20px Consolas";ctx.textAlign="center";ctx.fillText("LEAK",cx,cy-4);ctx.fillText("SHARE",cx,cy+20);
 }
 
-function drawRadar(dt){
+function drawRadar(dt,now){
   const c=$("radar"),ctx=c.getContext("2d"),dpr=window.devicePixelRatio||1;
-  const rect=c.getBoundingClientRect(); c.width=rect.width*dpr; c.height=310*dpr; ctx.scale(dpr,dpr);
+  const rect=c.getBoundingClientRect(); c.width=rect.width*dpr; c.height=310*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
   const w=rect.width,h=310,cx=w/2,cy=h/2,r=Math.min(w,h)*.39;
-  app.radarAngle+=dt*.0017;
+  app.radarAngle+=dt*.00225;
   ctx.clearRect(0,0,w,h);
 
-  ctx.save();
-  ctx.beginPath();ctx.arc(cx,cy,r+2,0,Math.PI*2);ctx.clip();
-
+  ctx.save(); ctx.beginPath();ctx.arc(cx,cy,r+3,0,Math.PI*2);ctx.clip();
   ctx.fillStyle="#020805";ctx.fillRect(cx-r-5,cy-r-5,(r+5)*2,(r+5)*2);
+
   ctx.strokeStyle="#124d2c";ctx.lineWidth=1;
   for(let i=1;i<=4;i++){ctx.beginPath();ctx.arc(cx,cy,r*i/4,0,Math.PI*2);ctx.stroke()}
   for(let i=0;i<12;i++){const a=i*Math.PI/6;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.stroke()}
 
+  for(let trail=0;trail<7;trail++){
+    const alpha=.22-trail*.027;
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle-trail*.09);
+    const grad=ctx.createRadialGradient(0,0,0,0,0,r);
+    grad.addColorStop(0,`rgba(0,255,106,${alpha})`);
+    grad.addColorStop(.55,`rgba(0,255,106,${alpha*.8})`);
+    grad.addColorStop(1,"rgba(0,255,106,0)");
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,-.12,.04);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+    ctx.restore();
+  }
   ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle);
-  const sweep=ctx.createLinearGradient(0,0,r,0);
-  sweep.addColorStop(0,"rgba(0,255,106,.45)");
-  sweep.addColorStop(1,"rgba(0,255,106,0)");
-  ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,-.22,.02);ctx.closePath();ctx.fillStyle=sweep;ctx.fill();
-  ctx.strokeStyle="rgba(118,255,157,.85)";ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r,0);ctx.stroke();
-  ctx.restore();
+  ctx.strokeStyle="rgba(190,255,210,.95)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r,0);ctx.stroke();ctx.restore();
 
-  app.leaks.forEach(x=>{
+  app.leakDisplay.forEach(x=>{
     const px=cx+Math.cos(x.a)*r*x.r,py=cy+Math.sin(x.a)*r*x.r;
-    const pulse=1+Math.sin(performance.now()/220+x.value)*.24;
-    ctx.beginPath();ctx.arc(px,py,Math.max(8,x.value/2.6)*pulse,0,Math.PI*2);ctx.fillStyle=x.color+"77";ctx.fill();
+    let diff=Math.abs(Math.atan2(Math.sin(app.radarAngle-x.a),Math.cos(app.radarAngle-x.a)));
+    const hit=Math.max(0,1-diff/.22);
+    const base=Math.max(8,x.value/2.7);
+    const pulse=1+Math.sin(now/210+x.value)*.18+hit*.9;
+    ctx.beginPath();ctx.arc(px,py,base*pulse,0,Math.PI*2);ctx.fillStyle=x.color+(hit>.05?"cc":"77");ctx.fill();
+    if(hit>.05){
+      ctx.strokeStyle=x.color;ctx.lineWidth=2+hit*3;
+      ctx.beginPath();ctx.arc(px,py,base*(1.4+hit*1.7),0,Math.PI*2);ctx.stroke();
+    }
     ctx.beginPath();ctx.arc(px,py,Math.max(3,x.value/7),0,Math.PI*2);ctx.fillStyle=x.color;ctx.fill();
   });
-
   ctx.restore();
 
   ctx.strokeStyle="#1aff73";ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,r+2,0,Math.PI*2);ctx.stroke();
   ctx.fillStyle="#fff";ctx.font="12px Consolas";ctx.textAlign="center";
-  app.leaks.forEach(x=>{
+  app.leakDisplay.forEach(x=>{
     const px=cx+Math.cos(x.a)*r*x.r,py=cy+Math.sin(x.a)*r*x.r;
-    const lx=Math.max(40,Math.min(w-40,px));
-    const ly=Math.max(18,Math.min(h-12,py-18));
+    const lx=Math.max(44,Math.min(w-44,px)), ly=Math.max(18,Math.min(h-12,py-18));
     ctx.fillText("⚠ "+x.name,lx,ly);
   });
+}
+
+function updatePowerDecay(now){
+  const duration=5200, hold=900;
+  const t=(now%(duration+hold))/(duration+hold);
+  const progress=t<duration/(duration+hold)?Math.min(1,(t*(duration+hold))/duration):1;
+  const eased=progress<.16?0:(1-Math.pow(1-(progress-.16)/.84,2.15));
+  const value=100-(48*Math.max(0,Math.min(1,eased)));
+  const rounded=Math.round(value);
+  $("decay").textContent="£"+rounded;
+  $("lostLine").textContent="Lost £"+(100-rounded);
+  $("decayFill").style.width=value+"%";
+  const scale=.55+.45*((value-52)/48);
+  $("decay").style.transform=`scale(${scale})`;
+  $("decay").style.color=value<62?"#ff3d4f":value<78?"#ffbf36":"#fff";
+  $("decay").style.opacity=.62+.38*((value-52)/48);
+  const blocks=Math.max(0,Math.ceil(value/10));
+  [...$("powerBlocks").children].forEach((b,i)=>b.classList.toggle("on",i<blocks));
 }
 
 function seedPipe(){
@@ -336,58 +376,26 @@ function seedPipe(){
   }
 }
 
-function updatePurchasingPower(now){
-  const cycle=6000;
-  const holdStart=900;
-  const decayEnd=4300;
-  const resetStart=5200;
-  const t=now%cycle;
-  let p;
-  if(t<holdStart){
-    p=0;
-    $("decayLabel").textContent="Starting purchasing power";
-  }else if(t<decayEnd){
-    const raw=(t-holdStart)/(decayEnd-holdStart);
-    p=1-Math.pow(1-raw,2.2);
-    $("decayLabel").textContent="Purchasing power draining";
-  }else if(t<resetStart){
-    p=1;
-    $("decayLabel").textContent="Today";
-  }else{
-    const raw=(t-resetStart)/(cycle-resetStart);
-    p=1-raw;
-    $("decayLabel").textContent="Resetting to £100";
-  }
-
-  const start=100,end=52;
-  const value=Math.round(start-(start-end)*p);
-  const lost=start-value;
-  const width=value;
-  const scale=1-(0.34*p);
-  const opacity=1-(0.18*p);
-  const hue=p<.55 ? "var(--green2)" : (p<.88 ? "var(--amber)" : "var(--red)");
-
-  $("decay").textContent="£"+value;
-  $("decayLost").textContent="Lost £"+lost;
-  $("decayBar").style.width=width+"%";
-  $("decay").style.transform=`scale(${scale})`;
-  $("decay").style.opacity=opacity;
-  $("decay").style.color=p<.08 ? "#fff" : hue;
-  $("decay").style.filter=`blur(${p*.35}px)`;
-  $("decayLost").style.opacity=.15+.85*p;
+function buildRails(){
+  [2000,2005,2010,2015,2020,2026].forEach(y=>{
+    const el=document.createElement("div");el.className="yearTick";el.dataset.year=y;el.textContent=y;
+    el.onclick=()=>{$("year").value=y; app.yearTarget=y;};
+    $("yearRail").appendChild(el);
+  });
+  for(let i=0;i<10;i++) $("powerBlocks").appendChild(document.createElement("span"));
 }
 
 function loop(now){
   const dt=now-app.last; app.last=now;
   app.debt+=app.debtPerSecond*(dt/1000);
   app.interestToday+=app.interestPerSecond*(dt/1000);
-  updateCore(); updateTimeMachine(); updatePurchasingPower(now); drawRadar(dt);
+  updateTimeMachine(); updateCore(now); updatePowerDecay(now); drawRadar(dt,now); drawPie();
   requestAnimationFrame(loop);
 }
 
 $("year").addEventListener("input",e=>{app.yearTarget=Number(e.target.value)});
 window.addEventListener("resize",()=>{drawPie()});
-seedPipe(); updateCore(); updateTimeMachine(); drawPie(); requestAnimationFrame(loop);
+buildRails(); seedPipe(); updateCore(performance.now()); updateTimeMachine(); requestAnimationFrame(loop);
 </script>
 </body>
 </html>
