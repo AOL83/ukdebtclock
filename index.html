@@ -1,111 +1,274 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UK Economic Instrument Panel</title>
+<title>UK Mission Control - Economic Reality</title>
 <style>
-body{margin:0;background:#000;color:#00ff66;font-family:Consolas,monospace}
-.header{text-align:center;padding:10px;border-bottom:1px solid #0f0}
-.hero{padding:10px;text-align:center}
-.hero .num{font-size:min(8vw,72px);font-weight:bold}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;padding:6px}
-.card{border:1px solid #0f0;background:#050505;padding:8px}
-.t{color:#fff;font-size:12px}
-.v{font-size:28px;font-weight:bold}
-.red{color:#ff5555}.amber{color:#ffb300}.white{color:#fff}
-.fuel{height:24px;background:#111;border:1px solid #333}
-.bar{height:100%;background:#00ff66}
-.small{font-size:12px}
+:root{
+  --bg:#020403;--panel:#07100b;--panel2:#0a1510;--grid:#0d2b1b;--green:#00ff6a;
+  --green2:#76ff9d;--amber:#ffbf36;--red:#ff3d4f;--blue:#4dd7ff;--muted:#7b8f83;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 0,#0b2116 0,#020403 38%,#000 100%);color:var(--green);font-family:Consolas,Monaco,monospace;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.025) 50%,rgba(0,0,0,.03) 50%);background-size:100% 4px;mix-blend-mode:screen;opacity:.35}
+header{padding:12px 16px;border-bottom:1px solid #124d2c;text-align:center;background:rgba(0,0,0,.55);position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
+h1{margin:0;color:#fff;letter-spacing:2px;font-size:clamp(18px,3vw,34px)}
+.sub{color:var(--muted);font-size:12px;margin-top:4px}
+.wrap{max-width:1700px;margin:0 auto;padding:10px}
+.debt-wall{border:1px solid #1aff73;background:linear-gradient(180deg,#08170f,#010302);box-shadow:0 0 28px rgba(0,255,106,.16) inset,0 0 28px rgba(0,255,106,.08);padding:16px;text-align:center;position:relative;overflow:hidden}
+.debt-wall:after{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent 0 84%,rgba(0,255,106,.12),transparent 90%);animation:sweep 8s linear infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.label{color:#fff;font-size:13px;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1}
+.big{font-size:clamp(38px,8vw,118px);font-weight:900;letter-spacing:-4px;text-shadow:0 0 18px rgba(0,255,106,.45);position:relative;z-index:1}
+.rate{color:var(--red);font-size:clamp(14px,2vw,24px);position:relative;z-index:1}
+.grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:10px;margin-top:10px}
+.panel{border:1px solid #124d2c;background:rgba(5,14,9,.92);padding:12px;min-height:310px;box-shadow:inset 0 0 30px rgba(0,0,0,.5)}
+.panel h2{margin:0 0 8px;color:#fff;font-size:15px;letter-spacing:1px;text-transform:uppercase}
+canvas,svg{width:100%;display:block}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.tile{border:1px solid #123820;background:#030805;padding:9px;min-height:78px}
+.tile .t{color:var(--muted);font-size:11px;text-transform:uppercase}
+.tile .v{font-size:clamp(20px,2.2vw,36px);font-weight:800;color:var(--green2)}
+.warn{color:var(--amber)!important}.bad{color:var(--red)!important}
+.gaugebox{display:grid;place-items:center;height:250px}
+.sliderbox{padding-top:6px}
+input[type=range]{width:100%;accent-color:var(--green)}
+.timeline{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+.ppwrap{height:245px;display:flex;align-items:center;justify-content:center;gap:18px;flex-direction:column}
+.note{color:var(--muted);font-size:12px;line-height:1.35}
+.decay{font-size:clamp(44px,8vw,92px);font-weight:900;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.35);transform-origin:center;animation:shrink 4.5s ease-in-out infinite}
+@keyframes shrink{0%,12%{transform:scale(1);color:#fff}65%,100%{transform:scale(.56);color:var(--amber)}}
+.decaybar{height:22px;width:86%;border:1px solid #333;background:#111;overflow:hidden}
+.decaybar span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber));animation:barshrink 4.5s ease-in-out infinite}
+@keyframes barshrink{0%,12%{width:100%}65%,100%{width:52%}}
+.leakpipe{height:110px;border:1px solid #333;position:relative;overflow:hidden;background:linear-gradient(90deg,#120707,#270404)}
+.drop{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:flow 1.25s linear infinite}
+@keyframes flow{from{transform:translateX(-20px)}to{transform:translateX(105vw)}}
+.status{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:11px}
+.pill{border:1px solid #1d6138;padding:4px 7px;background:#020503}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}.row{grid-template-columns:repeat(2,1fr)}.panel{min-height:auto}.big{letter-spacing:-2px}}
 </style>
 </head>
 <body>
-<div class="header"><h1>UK ECONOMIC INSTRUMENT PANEL™</h1></div>
-<div class="hero">
-<div class="white">UK NATIONAL DEBT</div>
-<div id="debt" class="num"></div>
-<div id="rate" class="red"></div>
+<header>
+  <h1>UK MISSION CONTROL FOR HOUSEHOLD FINANCIAL PRESSURE</h1>
+  <div class="sub">Build rule: Static Numbers → Animated Systems · single-file index.html runtime</div>
+</header>
+
+<div class="wrap">
+  <section class="debt-wall">
+    <div class="label">Animated National Debt Wall</div>
+    <div id="debt" class="big">£0</div>
+    <div id="debtRate" class="rate">+£0/sec</div>
+  </section>
+
+  <div class="row">
+    <div class="tile"><div class="t">Debt Interest Today</div><div id="interestToday" class="v bad"></div></div>
+    <div class="tile"><div class="t">Debt Per Citizen</div><div id="perCitizen" class="v"></div></div>
+    <div class="tile"><div class="t">Debt Per Taxpayer</div><div id="perTaxpayer" class="v warn"></div></div>
+    <div class="tile"><div class="t">Financial Fuel Tank</div><div id="fuelText" class="v bad"></div></div>
+  </div>
+
+  <main class="grid">
+    <section class="panel">
+      <h2>Financial SatNav Fuel Gauge</h2>
+      <div class="gaugebox">
+        <svg viewBox="0 0 320 220" aria-label="Financial fuel gauge">
+          <path d="M55 175 A105 105 0 0 1 265 175" fill="none" stroke="#1d3827" stroke-width="28" stroke-linecap="round"/>
+          <path d="M55 175 A105 105 0 0 1 125 76" fill="none" stroke="#ff3d4f" stroke-width="28" stroke-linecap="round"/>
+          <path d="M125 76 A105 105 0 0 1 205 76" fill="none" stroke="#ffbf36" stroke-width="28" stroke-linecap="round"/>
+          <path d="M205 76 A105 105 0 0 1 265 175" fill="none" stroke="#00ff6a" stroke-width="28" stroke-linecap="round"/>
+          <g stroke="#dfffe8" stroke-width="2">
+            <line x1="55" y1="175" x2="72" y2="165"/>
+            <line x1="110" y1="92" x2="121" y2="108"/>
+            <line x1="160" y1="70" x2="160" y2="92"/>
+            <line x1="210" y1="92" x2="199" y2="108"/>
+            <line x1="265" y1="175" x2="248" y2="165"/>
+          </g>
+          <text x="54" y="205" fill="#ff3d4f" font-size="20">E</text>
+          <text x="250" y="205" fill="#00ff6a" font-size="20">F</text>
+          <line id="fuelNeedle" x1="160" y1="175" x2="160" y2="92" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="160" cy="175" r="11" fill="#fff"/>
+          <text id="fuelGaugeText" x="160" y="142" fill="#fff" text-anchor="middle" font-size="34" font-weight="900">41%</text>
+          <text id="reserve" x="160" y="35" fill="#ff3d4f" text-anchor="middle" font-size="15">LOW FINANCIAL FUEL</text>
+        </svg>
+      </div>
+      <div class="note">The fuel gauge converts housing, food, energy, tax and inflation pressure into a single household stress reading.</div>
+    </section>
+
+    <section class="panel">
+      <h2>Leak Radar Scanner</h2>
+      <canvas id="radar" height="300"></canvas>
+      <div class="note">Bigger radar returns mean larger pressure leaks. Housing is currently the dominant return.</div>
+    </section>
+
+    <section class="panel">
+      <h2>Leak Pie</h2>
+      <canvas id="pie" height="300"></canvas>
+      <div class="note">Housing 44% · Food 21% · Energy 15% · Tax 13% · Other 7%</div>
+    </section>
+
+    <section class="panel">
+      <h2>Purchasing Power Decay</h2>
+      <div class="ppwrap">
+        <div id="decay" class="decay">£100</div>
+        <div class="decaybar"><span></span></div>
+        <div class="note">£100 purchasing power in 2000 visually decays toward roughly £52 today.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Housing Leak Animation</h2>
+      <div class="leakpipe" id="pipe"></div>
+      <div class="row" style="grid-template-columns:repeat(2,1fr);margin-top:8px">
+        <div class="tile"><div class="t">Housing Leak</div><div class="v bad">£8,200</div></div>
+        <div class="tile"><div class="t">Main Leak</div><div class="v bad">Housing</div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Time Machine</h2>
+      <div class="sliderbox">
+        <input id="year" type="range" min="2000" max="2026" value="2026" step="1">
+        <div class="timeline"><span>2000</span><span id="yearLabel">2026</span><span>2026</span></div>
+      </div>
+      <div class="row" style="grid-template-columns:repeat(2,1fr);margin-top:12px">
+        <div class="tile"><div class="t">Debt</div><div id="tmDebt" class="v"></div></div>
+        <div class="tile"><div class="t">House Price</div><div id="tmHouse" class="v warn"></div></div>
+        <div class="tile"><div class="t">Gold</div><div id="tmGold" class="v"></div></div>
+        <div class="tile"><div class="t">Fuel Tank</div><div id="tmFuel" class="v bad"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="status">
+    <span class="pill">Runtime: requestAnimationFrame</span>
+    <span class="pill">Mode: animated systems</span>
+    <span class="pill">Data: built-in estimates / API-ready</span>
+    <span class="pill">Deploy: one static HTML file</span>
+  </div>
 </div>
 
-<div class="grid" id="metrics"></div>
-
 <script>
-const s={
-debt:3104672883219,debtps:5842,pop:68000000,tax:33000000,
-interest:328447192,salary:37000,rent:1350,deposit:48000,
-fuel:41,lost:18740
+const app={
+  debt:3104672883219,
+  debtPerSecond:5842,
+  interestToday:328447192,
+  interestPerSecond:13,
+  population:68000000,
+  taxpayers:33000000,
+  fuel:41,
+  year:2026,
+  last:performance.now(),
+  radarAngle:0,
+  leaks:[
+    {name:"Housing",value:44,color:"#ff3d4f",r:.82,a:-.5},
+    {name:"Food",value:21,color:"#ffbf36",r:.58,a:2.45},
+    {name:"Energy",value:15,color:"#4dd7ff",r:.45,a:1.15},
+    {name:"Tax",value:13,color:"#ff7a3d",r:.68,a:3.8},
+    {name:"Other",value:7,color:"#76ff9d",r:.32,a:5.2}
+  ],
+  history:{
+    2000:{debt:.36,house:85000,gold:180,fuel:89},
+    2005:{debt:.48,house:158000,gold:260,fuel:78},
+    2010:{debt:1.0,house:168000,gold:780,fuel:68},
+    2015:{debt:1.6,house:195000,gold:760,fuel:61},
+    2020:{debt:2.1,house:235000,gold:1400,fuel:52},
+    2026:{debt:3.1,house:290000,gold:2400,fuel:41}
+  }
 };
 
-const metrics=[
-["Debt Per Citizen",()=>fmt(s.debt/s.pop)],
-["Debt Per Taxpayer",()=>fmt(s.debt/s.tax)],
-["Debt Interest Today",()=>fmt(s.interest)],
-["£100 In 2000",()=>"£52"],
-["House Deposit",()=>fmt(s.deposit)],
-["Years To Save",()=>(s.deposit/(s.salary*.1)).toFixed(1)],
-["Rent Burden",()=>((s.rent*12/s.salary)*100).toFixed(0)+"%"],
-["Energy Bill","£1,720"],
-["Weekly Shop","+£38"],
-["First Home Age","34"],
-["Mortgage","£248,000"],
-["Tax Freedom Days","174"],
-["House Prices Since 2000","+312%"],
-["Gold Since 2000","+640%"],
-["Money Supply Since 2000","+390%"],
-["Savings Purchasing Power","-48%"],
-["Food Inflation","+31%"],
-["Real Wage Growth","-6%"],
-["Pension Gap","£142,000"],
-["Value Lost Since 2020",()=>fmt(s.lost)],
-["Main Leak","Housing"],
-["Fuel Tank",()=>s.fuel+"%"],
-["Inflation","3.2%"],
-["Base Rate","4.75%"],
-["Population","68M"],
-["Taxpayers","33M"],
-["GDP Per Capita","£37k"],
-["Home Ownership","63%"],
-["Renters","10.6M"],
-["Energy Leak","£2,700"],
-["Food Leak","£3,900"],
-["Tax Leak","£2,400"],
-["Housing Leak","£8,200"],
-["Other Leak","£1,540"],
-["FTSE","8,200"],
-["Gold","£2,400/oz"],
-["GBP/USD","1.28"],
-["National Insurance","8%"],
-["State Pension","£11,500"],
-["Council Tax Avg","£2,171"]
-];
+const $=id=>document.getElementById(id);
+const money=n=>"£"+Math.round(n).toLocaleString();
 
-function fmt(n){return "£"+Math.round(n).toLocaleString()}
-
-function render(){
-document.getElementById('debt').textContent=fmt(s.debt);
-document.getElementById('rate').textContent='+'+s.debtps.toLocaleString()+'/sec';
-const g=document.getElementById('metrics');
-g.innerHTML='';
-metrics.forEach(m=>{
- const v=typeof m[1]==='function'?m[1]():m[1];
- const d=document.createElement('div');
- d.className='card';
- d.innerHTML='<div class=t>'+m[0]+'</div><div class=v>'+v+'</div>';
- g.appendChild(d);
-});
-const fuel=document.createElement('div');
-fuel.className='card';
-fuel.innerHTML='<div class=t>Financial SatNav</div><div class=fuel><div class=bar style="width:'+s.fuel+'%"></div></div><div class=v>'+s.fuel+'%</div><div class=small>Value Lost: '+fmt(s.lost)+'</div>';
-g.appendChild(fuel);
+function interp(year,key){
+  const years=Object.keys(app.history).map(Number).sort((a,b)=>a-b);
+  let a=years[0],b=years.at(-1);
+  for(let i=0;i<years.length-1;i++){if(year>=years[i]&&year<=years[i+1]){a=years[i];b=years[i+1];break}}
+  const t=(year-a)/(b-a||1);
+  return app.history[a][key]+(app.history[b][key]-app.history[a][key])*t;
 }
 
-setInterval(()=>{
- s.debt+=s.debtps;
- s.interest+=13;
- render();
-},1000);
+function updateCore(){
+  $("debt").textContent=money(app.debt);
+  $("debtRate").textContent="+"+money(app.debtPerSecond).replace("£","£")+"/sec";
+  $("interestToday").textContent=money(app.interestToday);
+  $("perCitizen").textContent=money(app.debt/app.population);
+  $("perTaxpayer").textContent=money(app.debt/app.taxpayers);
+  $("fuelText").textContent=app.fuel+"%";
+  $("fuelGaugeText").textContent=app.fuel+"%";
+  const deg=-90+(app.fuel/100)*180;
+  $("fuelNeedle").setAttribute("transform",`rotate(${deg} 160 175)`);
+  $("reserve").style.opacity=app.fuel<45?(Math.sin(performance.now()/180)>0?1:.25):0;
+}
 
-render();
+function updateTimeMachine(){
+  const y=Number($("year").value); app.year=y; $("yearLabel").textContent=y;
+  $("tmDebt").textContent="£"+interp(y,"debt").toFixed(2)+"T";
+  $("tmHouse").textContent=money(interp(y,"house"));
+  $("tmGold").textContent=money(interp(y,"gold"))+"/oz";
+  $("tmFuel").textContent=Math.round(interp(y,"fuel"))+"%";
+}
+
+function drawPie(){
+  const c=$("pie"),ctx=c.getContext("2d"),w=c.width=c.clientWidth,h=c.height;
+  ctx.clearRect(0,0,w,h);
+  const cx=w/2,cy=h/2,r=Math.min(w,h)*.32;
+  let start=-Math.PI/2,total=app.leaks.reduce((a,b)=>a+b.value,0);
+  app.leaks.forEach(x=>{
+    const end=start+(x.value/total)*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fillStyle=x.color;ctx.fill();
+    const mid=(start+end)/2;ctx.fillStyle="#fff";ctx.font="13px Consolas";ctx.textAlign="center";
+    ctx.fillText(x.name,cx+Math.cos(mid)*(r+45),cy+Math.sin(mid)*(r+45));
+    ctx.fillText(x.value+"%",cx+Math.cos(mid)*(r+68),cy+Math.sin(mid)*(r+68));
+    start=end;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,r*.48,0,Math.PI*2);ctx.fillStyle="#030805";ctx.fill();
+  ctx.fillStyle="#00ff6a";ctx.font="bold 21px Consolas";ctx.textAlign="center";ctx.fillText("LEAKS",cx,cy+7);
+}
+
+function drawRadar(dt){
+  const c=$("radar"),ctx=c.getContext("2d"),w=c.width=c.clientWidth,h=c.height;
+  const cx=w/2,cy=h/2,r=Math.min(w,h)*.42;
+  app.radarAngle+=dt*.0015;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle="#124d2c";ctx.lineWidth=1;
+  for(let i=1;i<=4;i++){ctx.beginPath();ctx.arc(cx,cy,r*i/4,0,Math.PI*2);ctx.stroke()}
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.stroke()}
+  const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+  grad.addColorStop(0,"rgba(0,255,106,.35)");grad.addColorStop(1,"rgba(0,255,106,0)");
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(app.radarAngle);ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,-.08,.08);ctx.closePath();ctx.fillStyle=grad;ctx.fill();ctx.restore();
+  app.leaks.forEach(x=>{
+    const px=cx+Math.cos(x.a)*r*x.r,py=cy+Math.sin(x.a)*r*x.r;
+    const pulse=1+Math.sin(performance.now()/260+x.value)*.25;
+    ctx.beginPath();ctx.arc(px,py,(x.value/2.4)*pulse,0,Math.PI*2);ctx.fillStyle=x.color+"88";ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="12px Consolas";ctx.fillText("⚠ "+x.name,px+12,py-12);
+  });
+}
+
+function seedPipe(){
+  const p=$("pipe"); p.innerHTML="";
+  for(let i=0;i<26;i++){
+    const d=document.createElement("span");d.className="drop";
+    d.style.top=(15+Math.random()*75)+"px";
+    d.style.animationDelay=(-Math.random()*1.25)+"s";
+    d.style.animationDuration=(.7+Math.random()*.8)+"s";
+    d.style.opacity=.45+Math.random()*.55;
+    p.appendChild(d);
+  }
+}
+
+function loop(now){
+  const dt=now-app.last; app.last=now;
+  app.debt+=app.debtPerSecond*(dt/1000);
+  app.interestToday+=app.interestPerSecond*(dt/1000);
+  updateCore(); drawRadar(dt);
+  requestAnimationFrame(loop);
+}
+
+$("year").addEventListener("input",updateTimeMachine);
+seedPipe(); updateCore(); updateTimeMachine(); drawPie(); requestAnimationFrame(loop);
 </script>
 </body>
 </html>
